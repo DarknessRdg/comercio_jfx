@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="564.0" minWidth="1101.0" prefHeight="564.0" prefWidth="1101.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetocomerciojfx.controller.FXMLMainController">
+    <stylesheets>
+        <URL value="@/projetocomerciojfx/css/fxmlmain.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane fx:id="anchorMenu" layoutX="80.0" layoutY="131.0" maxWidth="218.0" minWidth="10.0" prefHeight="564.0" prefWidth="198.0" style="-fx-background-color: gray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="903.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox layoutX="48.0" layoutY="93.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="169.0" style="-fx-background-color: gray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Pane fx:id="panePerfil" prefHeight="179.0" prefWidth="173.0" />
+                  <JFXButton fx:id="btnProdutos" onAction="#abrirProdutos" prefHeight="51.0" prefWidth="200.0" ripplerFill="#0728ff" text="Produtos" textFill="WHITE">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnNovaCompra" onAction="#abrirCompra" prefHeight="51.0" prefWidth="209.0" ripplerFill="#0728ff" text="Nova Compra" textFill="WHITE">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="anchorConteudo" layoutX="198.0" layoutY="306.0" prefHeight="564.0" prefWidth="903.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="198.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   </children>
+</AnchorPane>

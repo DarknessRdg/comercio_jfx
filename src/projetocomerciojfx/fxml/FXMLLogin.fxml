@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="572.0" prefWidth="356.0" style="-fx-background-color: #494949;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetocomerciojfx.controller.FXMLLoginController">
+   <children>
+      <AnchorPane id="AnchorPane" fx:id="paneMenu" layoutX="22.0" layoutY="18.0" prefHeight="536.0" prefWidth="313.0" style="-fx-background-color: #2C2255;" stylesheets="@../css/fxmllogin.css">
+         <effect>
+            <DropShadow color="#000000fc" height="71.41" radius="35.945" spread="0.05" width="74.37" />
+         </effect>
+         <children>
+            <JFXTextField fx:id="textUsuario" cache="true" focusColor="#5476dd" labelFloat="true" layoutX="34.0" layoutY="215.0" prefHeight="37.0" prefWidth="245.0" promptText="Usuário" unFocusColor="#434343">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </JFXTextField>
+            <JFXPasswordField fx:id="textSenha" labelFloat="true" layoutX="34.0" layoutY="312.0" prefHeight="37.0" prefWidth="245.0" promptText="Senha">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </JFXPasswordField>
+            <JFXButton fx:id="btnEntrar" buttonType="RAISED" defaultButton="true" layoutX="37.0" layoutY="415.0" onMouseClicked="#entrar" prefHeight="37.0" prefWidth="245.0" ripplerFill="#721e30" style="-fx-background-color: #943A4D;" text="ENTRAR" textAlignment="CENTER" textFill="#ffbfce">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </JFXButton>
+            <Label layoutX="37.0" layoutY="36.0" prefHeight="114.0" prefWidth="245.0" text="COMÉRCIO DA CRISTINA" textAlignment="CENTER" textFill="#d3ddaa" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="btnClose" layoutX="281.0" onMouseClicked="#close" text="X" textFill="#797397">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </JFXButton>
+            <Label fx:id="labelMensagem" layoutX="34.0" layoutY="372.0" prefHeight="24.0" prefWidth="211.0" textFill="#dd2828" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

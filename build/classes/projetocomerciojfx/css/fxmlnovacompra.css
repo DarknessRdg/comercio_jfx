@@ -1,0 +1,22 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+#panePrincipal {
+    .table-view{
+        -fx-font-size: 11pt;
+    }
+
+    .table-column{
+        -fx-font-size: 11pt;
+    }
+}
+
+
+#quantidade{
+    -fx-alignment: BASELINE_CENTER;
+}
+
+#preco{
+    -fx-alignment: BASELINE_CENTER;
+}
