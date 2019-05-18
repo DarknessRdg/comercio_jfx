@@ -9,11 +9,16 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -39,17 +44,23 @@ public class FXMLProdutosController implements Initializable {
     private TableColumn<Produto, String> tableColumnPRECO;
     @FXML
     private JFXButton btnPesquisar;
-     @FXML
+    @FXML
     private JFXButton btnAdicionarProduto;
+    @FXML
+    private JFXButton btnExcluir;
+    @FXML
+    private JFXButton btnEditar;
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb) {        
         tableColumnCOD.setCellValueFactory(new PropertyValueFactory<>("codBarras"));
         tableColumnNOME.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnPRECO.setCellValueFactory(new PropertyValueFactory<>("preco"));
+        
+        this.setDoubleClickTable();
     }
 
     @FXML
@@ -63,11 +74,82 @@ public class FXMLProdutosController implements Initializable {
         tableProdutos.setItems(observList);
     }
     
-    @FXML private void addProduto(ActionEvent event){
+    @FXML 
+    private void addProduto(ActionEvent event){
         try{
             new AddProduto().start(new Stage());
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, "error ao abir janela de adicionar produto: " + ex);
         }
+    }
+    
+    @FXML
+    private void excluirProduto(ActionEvent event){
+        Produto produtoSelecionado = this.getTrableRowFocudesProduto();
+        if(produtoSelecionado.delete())
+            JOptionPane.showMessageDialog(null, "Produto delete com sucesso");
+        else
+            JOptionPane.showMessageDialog(null, "Error ao deletar produto");
+        
+        this.pesquisarTodos();
+    }
+    
+    @FXML
+    private void editarProduto(ActionEvent event){
+        Produto produtoSelecionado = getTrableRowFocudesProduto();                 
+        this.editarProduto(produtoSelecionado);
+        
+        this.pesquisarTodos();
+    }
+    
+    @FXML
+    private void removerProduto(KeyEvent event){
+        KeyCode DELETE = KeyCode.DELETE;
+        if (event.getCode() != DELETE)
+            return;
+        
+        this.excluirProduto(null);
+    }
+    
+    private void setDoubleClickTable(){
+        tableProdutos.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    if(mouseEvent.getClickCount() == 1){
+                        btnEditar.setDisable(false);
+                        btnExcluir.setDisable(false);
+                    }
+                    else if(mouseEvent.getClickCount() == 2){
+                        Produto produtoSelecionado = getTrableRowFocudesProduto();
+                        editarProduto(produtoSelecionado);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void editarProduto(Produto produto){
+        try{
+            new AddProduto().start(new Stage(), produto);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "error ao abir janela de adicionar produto: " + ex);
+        }
+    }
+    
+    private void pesquisarTodos(){
+        labelInput.setText("");
+        this.pesquisarProduto(new ActionEvent());
+    }
+    
+    private int getTableRowFocusedIndex(){
+        TableView.TableViewSelectionModel<Produto> selectionModel = tableProdutos.getSelectionModel();
+        return selectionModel.getFocusedIndex();
+    }
+
+    private Produto getTrableRowFocudesProduto(){
+        TableView.TableViewSelectionModel<Produto> selectionModel = tableProdutos.getSelectionModel();
+        return selectionModel.getSelectedItem();
     }
 }

@@ -97,7 +97,7 @@ public class Produto {
             PreparedStatement sttm = conn.prepareStatement(query);
             sttm.setString(1, codBarras);
             sttm.setString(2, nome);
-            sttm.setString(3, this.getPreco());
+            sttm.setString(3, this.getPreco().replace(',', '.'));
             sttm.setString(4, codBarras);
             
             sttm.execute();

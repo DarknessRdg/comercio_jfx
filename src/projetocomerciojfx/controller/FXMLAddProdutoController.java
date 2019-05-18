@@ -33,6 +33,7 @@ public class FXMLAddProdutoController implements Initializable {
     private JFXTextField textPreco;
     @FXML
     private Label labelFeedback;
+    private boolean editar = false;
 
 
     /**
@@ -40,9 +41,16 @@ public class FXMLAddProdutoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        labelFeedback.setVisible(false);
-    }    
+        this.btnSalvar.setDisable(true);
+    }
+    
+    public void initData(Produto produto){
+        this.textCod.setText(produto.getCod());
+        this.textNome.setText(produto.getNome());
+        this.textPreco.setText(produto.getPreco());
+        
+        this.btnSalvar.setDisable(false);
+    }
 
     @FXML
     private void salvar(ActionEvent event) {
