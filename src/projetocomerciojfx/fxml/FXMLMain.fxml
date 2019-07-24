@@ -27,10 +27,7 @@
                         <Font size="23.0" />
                      </font>
                      <graphic>
-                        <ImageView fx:id="imgProduto" fitHeight="37.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/icons/archive-solid.png" />
-                           </image></ImageView>
+                        <ImageView fx:id="imgProduto" fitHeight="37.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </JFXButton>
                   <JFXButton fx:id="btnNovaCompra" alignment="TOP_LEFT" onAction="#abrirCompra" prefHeight="62.0" prefWidth="191.0" ripplerFill="#35868f" text="  Compra" textFill="#4f5153">
@@ -38,11 +35,7 @@
                         <Font size="23.0" />
                      </font>
                      <graphic>
-                        <ImageView fx:id="imgCompra" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/icons/cart-plus-solid.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fx:id="imgCompra" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </JFXButton>
                   <JFXButton fx:id="btnRelatorio" alignment="TOP_LEFT" onAction="#abrirRelatorio" prefHeight="51.0" prefWidth="191.0" ripplerFill="#348690" text="  Relatório" textFill="#4f5153">
@@ -50,10 +43,7 @@
                         <Font size="23.0" />
                      </font>
                      <graphic>
-                        <ImageView fx:id="imgRelatorio" fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/icons/file-alt-regular.png" />
-                           </image></ImageView>
+                        <ImageView fx:id="imgRelatorio" fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
                      </graphic>
                   </JFXButton>
                </children>

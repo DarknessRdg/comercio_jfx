@@ -58,8 +58,10 @@ public class Cliente {
             sttm.setString(4, cpf);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             System.out.println("Error updateCliente " + ex);
             return false;
         }
@@ -74,8 +76,10 @@ public class Cliente {
             
             sttm.setString(1, cpf);
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             System.out.println("Error removerCliente " + ex);
             return false;
         }
@@ -93,9 +97,11 @@ public class Cliente {
             sttm.setString(3, telefone);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error inserir " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -117,12 +123,14 @@ public class Cliente {
             this.nome = result.getString("nome");
             this.telefone = result.getString("telefone");
             
+            Conexao.closeConnection(conn, sttm, result);
             return true;
             
         }catch(SQLException ex){
             System.out.println("Error setCliente " + ex);
             this.nome = null;
             this.telefone = null;
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -140,9 +148,10 @@ public class Cliente {
             
             result.first();
             result.getString("cpf");
+            Conexao.closeConnection(conn, sttm, result);
             return true;
-            
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             return false;
         }
     }

@@ -24,9 +24,10 @@ public class Tables {
     private void login(){
         System.out.print("- Table login: ");
         String query =  "CREATE TABLE LOGIN(" +
-                            "id int primary key auto_increment," +
-                            "username varchar(50) unique," +
-                            "senha varchar(20)" +
+                            "id serial NOT NULL PRIMARY KEY," +
+                            "username VARCHAR(50) UNIQUE," +
+                            "senha VARCHAR(255)," + 
+                            "ativo BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "login"))
@@ -38,9 +39,11 @@ public class Tables {
     private void vendedor(){
         System.out.print("- Table vendedor: ");
         String query =  "CREATE TABLE VENDEDOR(" +
-                            "cpf varchar(11) primary key not null," +
-                            "nome varchar(100)," +
-                            "id_login int references login(id)" +
+                            "id serial primary key not null, " +
+                            "cpf VARCHAR(11) unique, " +
+                            "nome VARCHAR(100)," +
+                            "id_login INT REFERENCES LOGIN(id) ON UPDATE NO ACTION ON DELETE CASCADE," +
+                            "ativo BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "vendedor"))
@@ -52,9 +55,11 @@ public class Tables {
     private void cliente(){
         System.out.print("- Table cliente: ");
         String query =  "CREATE TABLE CLIENTE(" +
-                            "cpf varchar(11) primary key not null," +
-                            "nome varchar(100)," +
-                            "telefone varchar(14)" +
+                            "id serial primary key not null," +
+                            "cpf VARCHAR(11) unique," +
+                            "nome VARCHAR(100)," +
+                            "telefone VARCHAR(14)," +
+                            "ativo BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "cliente"))
@@ -67,9 +72,11 @@ public class Tables {
     private void produto(){
         System.out.print("- Table produto: ");
         String query =  "CREATE TABLE PRODUTO(" +
-                            "cod_barras varchar(50) primary key not null," +
-                            "nome varchar(100)," +
-                            "preco decimal(6,2)" +
+                            "id serial NOT NULL PRIMARY KEY," +
+                            "cod_barras VARCHAR(50) NOT NULL," +
+                            "nome VARCHAR(100)," +
+                            "preco DECIMAL(6,2), " +
+                            "ativo BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "produto"))
@@ -82,10 +89,11 @@ public class Tables {
     private void venda(){
         System.out.print("- Table venda: ");
         String query =  "CREATE TABLE VENDA(" +
-                            "id int not null auto_increment primary key," +
-                            "cpf_cliente varchar(11) not null references cliente(cpf)," +
-                            "cpf_vendedor varchar(11) not null references vendedor(cpf)," +
-                            "data_compra date" +
+                            "id serial NOT NULL PRIMARY KEY," +
+                            "cpf_cliente VARCHAR(11) REFERENCES CLIENTE(cpf) ON UPDATE NO ACTION ON DELETE CASCADE," +
+                            "cpf_vendedor VARCHAR(11) REFERENCES VENDEDOR(cpf) ON UPDATE NO ACTION ON DELETE CASCADE," +
+                            "data_compra date default now()," +
+                            "ativo BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "venda"))
@@ -97,12 +105,12 @@ public class Tables {
     private void item_venda(){
         System.out.print("- Table item_venda: ");
         String query =  "CREATE TABLE ITEM_VENDA(" +
-                            "id int not null auto_increment primary key," +
-                            "id_venda int not null references venda(id_venda)," +
-                            "id_produto varchar(50) not null references produto(id_produto)," +
+                            "id serial NOT NULL PRIMARY KEY," +
+                            "id_venda int NOT NULL REFERENCES VENDA(id) ON UPDATE NO ACTION ON DELETE CASCADE," +
+                            "id_produto int NOT NULL REFERENCES PRODUTO(id) ON UPDATE NO ACTION ON DELETE CASCADE," +
                             
-                            "qnt_produto int not null default 1," + 
-                            "preco_produto decimal(5, 2)" +
+                            "qnt_produto int NOT NULL DEFAULT 1," + 
+                            "preco_produto DECIMAL(6, 2) NOT NULL" +
                         ");";
         
         if (this.createTable(query, "item_venda"))
@@ -119,7 +127,12 @@ public class Tables {
             return true;
         }catch(SQLException ex){
             // return true if aleready exists, eslse return false;
-            return ex.toString().contains("Table '" + tableName.trim() + "' already exists");
+            if(ex.toString().contains("relation \"" + tableName.trim() + "\" already exists"))
+                return true;
+            else {
+                System.out.println(ex);
+                return false;
+            }
         }
     }
     

@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import models.Produto;
 
 /**
@@ -36,6 +38,8 @@ public class Carrinho {
     
     public Date getDate(){ return this.date; }
     
+    public ArrayList<ProdutoQnt> getListaProdutos(){ return this.lista;}
+    
     private int getLastIdVenda(){
         Connection conexao = Conexao.getConnection();
         String query = "SELECT * FROM VENDA";
@@ -46,9 +50,11 @@ public class Carrinho {
             ResultSet result = sttm.executeQuery();
             result.last();
             
+            Conexao.closeConnection(conexao, sttm, result);
             return result.getInt("id");
             
         }catch (SQLException ex){
+            Conexao.closeConnection(conexao);
             if(ex.toString().contains("empty result set"))
                 return 0;
             System.out.println("Error getLastIdVenda: " + ex);
@@ -71,6 +77,15 @@ public class Carrinho {
         this.preco += produtoNovo.getPrecoDouble() * produtoNovo.getQuantidade();
         
         return produtoNovo;
+    }
+    
+    public void addDesconto(Double desconto){
+        for(int i = 0; i < lista.size(); i++){
+            ProdutoQnt produto = lista.get(i);
+            produto.setPreco(
+                    produto.getPrecoDouble() - produto.getPrecoDouble() * desconto
+            );
+        }
     }
     
     public void removerProduto(ProdutoQnt produto){
@@ -110,7 +125,7 @@ public class Carrinho {
         
         if(!this.inserirProduto())
             return "Error ao inserir produto";
-       
+        
         return "Compra finalizada com sucesso!";
     }
     
@@ -118,6 +133,7 @@ public class Carrinho {
         Connection conn = Conexao.getConnection();
         String query = "INSERT INTO item_venda(id_venda, id_produto, preco_produto, qnt_produto) "
                 + "values(?, ?, ?, ?)";
+        System.out.println(lista.size());
         for(ProdutoQnt produto: lista){
             try{
                 PreparedStatement sttm = conn.prepareStatement(query);
@@ -129,11 +145,14 @@ public class Carrinho {
                 
                 sttm.executeUpdate();
                 
+                sttm.close();
             }catch(SQLException ex){
+                Conexao.closeConnection(conn);
                 System.out.println("Error inserir produto " + ex);
                 return false;
             }
         }
+        Conexao.closeConnection(conn);
         return true;
     }
     
@@ -151,10 +170,50 @@ public class Carrinho {
             sttm.setDate(4, this.date);
             
             sttm.executeUpdate();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             throw new RuntimeException("Error InserirVenda: " + ex);
         }
-        
+    }
+    
+    private boolean fazerCompra(int vendedor, int cliente) {
+        Connection conn = Conexao.getConnection();
+        String query = "SELECT * FROM FAZER_COMPRA(?, ? , ?)";
+        try{
+            PreparedStatement sttm = conn.prepareStatement(query);
+            
+            Object[] array = new Object[this.lista.size()];
+            for (int i = 0; i < this.lista.size(); i++)
+                array[i] = this.lista.get(i).getId();
+            
+            sttm.setArray(1, conn.createArrayOf("INT", array));
+            if (vendedor == 0)
+                sttm.setNull(2, Types.INTEGER);
+            else
+                sttm.setInt(2, vendedor);
+            
+            if (cliente == 0)
+                sttm.setNull(3, Types.INTEGER);
+            else
+                sttm.setInt(3, vendedor);
+                
+            ResultSet result = sttm.executeQuery();
+            boolean retorno = result.next();
+            Conexao.closeConnection(conn, sttm, result);
+            return retorno;
+        }catch(SQLException ex){
+            Conexao.closeConnection(conn);
+            JOptionPane.showMessageDialog(null, "Error FazerVenda: " + ex);
+            
+            Conexao.closeConnection(conn);
+            return false;
+        }   
+    }
+    
+    private int[] listaDeIdProduto(){
+        int x[] = new int[3];
+        return x;
     }
 }

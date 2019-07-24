@@ -62,17 +62,19 @@ public class Login {
     private boolean updateLogin(){
         Connection conn = Conexao.getConnection();
         String query = "UPDATE LOGIN SET SENHA = ? WHERE ID_LOGIN = ?";
-        
         try{
             PreparedStatement sttm = conn.prepareStatement(query);
             sttm.setString(1, senha);
             sttm.setInt(2, id);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error updateLogin " + ex);
-            return false;
+            
+            Conexao.closeConnection(conn);
+            return false; 
         }
     }
     
@@ -85,9 +87,12 @@ public class Login {
             
             sttm.setInt(1, this.id);
             sttm.execute();
+            
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error removerLogin " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -104,9 +109,11 @@ public class Login {
             sttm.execute();
             
             this.setLogin();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error inserirLogin " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -123,9 +130,11 @@ public class Login {
             ResultSet result = sttm.executeQuery();
             
             result.first();
-            result.getInt("id");        
+            result.getInt("id");
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -146,10 +155,13 @@ public class Login {
             this.login = result.getString("username");
             this.senha = result.getString("senha");
             
+            Conexao.closeConnection(conn, sttm);
         }catch(SQLException ex){
             System.out.println("Error setLogin" + ex);
             this.login = null;
             this.senha = null;
+            
+            Conexao.closeConnection(conn);
         }
     }
     
@@ -169,10 +181,13 @@ public class Login {
             this.login = result.getString("login");
             this.senha = result.getString("senha");
             
+            Conexao.closeConnection(conn, sttm);
         }catch(SQLException ex){
             System.out.println("Error setLogin" + ex);
             this.senha = null;
             this.id = -1;
+            
+            Conexao.closeConnection(conn);
         }
     }
 }

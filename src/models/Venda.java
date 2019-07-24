@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -81,9 +82,11 @@ public class Venda {
             
             result.first();
             result.getString("id_venda");
+            Conexao.closeConnection(conn, sttm, result);
             return true;
         }catch(SQLException ex){
             System.out.println("Error exists(): " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -101,9 +104,12 @@ public class Venda {
             sttm.setDate(4, this.date);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
-            throw new RuntimeException("Error InserirVenda: " + ex);
+            Conexao.closeConnection(conn);
+            JOptionPane.showMessageDialog(null, "Error InserirVenda: " + ex);
+            return false;
         }
         
     }
@@ -123,10 +129,11 @@ public class Venda {
             this.cpfCliente = result.getString("id_cliente");
             this.cpfVendedor = result.getString("id_vendedor");
             this.date = result.getDate("data_compra");
-            
+            Conexao.closeConnection(conexao, sttm);
         }catch (SQLException ex){
             this.cpfCliente = null;
             this.cpfVendedor = null;
+            Conexao.closeConnection(conexao);
         }
     }
     
@@ -139,11 +146,11 @@ public class Venda {
             sttm = conexao.prepareStatement(query);
             ResultSet result = sttm.executeQuery();
             result.last();
-            
+            Conexao.closeConnection(conexao, sttm);
             return result.getInt("id_venda");
-            
         }catch (SQLException ex){
             System.out.println("Error getLastIdVenda: " + ex);
+            Conexao.closeConnection(conexao);
             return -2;
         }
     }

@@ -58,9 +58,11 @@ public class Vendedor {
             
             result.first();
             result.getString("cpf");
+            Conexao.closeConnection(conn, sttm, result);
             return true;
         }catch(SQLException ex){
             System.out.println("Error exists(): " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -76,9 +78,11 @@ public class Vendedor {
             
             sttm.setString(1, this.cpf);
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error removerVendedor " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }    
     }
@@ -92,9 +96,11 @@ public class Vendedor {
             
             sttm.setInt(1, this.id_login);
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error removerLogin " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -111,9 +117,11 @@ public class Vendedor {
             sttm.setInt(3, this.id_login);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error updateVendedor " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -129,9 +137,11 @@ public class Vendedor {
             sttm.setInt(3, this.id_login);
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
             System.out.println("Error inserirVendedor " + ex);
+            Conexao.closeConnection(conn);
             return false;
         }
     }
@@ -147,14 +157,16 @@ public class Vendedor {
             
             ResultSet result = sttm.executeQuery();
             
-            result.first();
+            result.next();
             this.cpf = result.getString("cpf");
             this.nome = result.getString("nome");
             this.id_login = result.getInt("id_login");
             
+            Conexao.closeConnection(conn, sttm, result);
         }catch(SQLException ex){
             System.out.println("Error getVendedor " + ex);
             this.nome = null;
+            Conexao.closeConnection(conn);
         }
     }
 }

@@ -5,6 +5,8 @@
  */
 package projetocomerciojfx.controller;
 
+import estilos.icons.Icon;
+import estilos.colors.Color;
 import javax.swing.JOptionPane;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
@@ -14,11 +16,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 
 /**
  * FXML Controller class
@@ -45,11 +45,14 @@ public class FXMLMainController implements Initializable {
     @FXML
     private ImageView imgRelatorio;
     
-    // vairiables to pattern colors and url
-    private String darkColor;
-    private String dangerColor;
-    private String urlImg;
-
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        this.selectBtn("");
+    }
+    
     @FXML
     private void abrirProdutos(ActionEvent event) {
         try {
@@ -108,55 +111,50 @@ public class FXMLMainController implements Initializable {
         AnchorPane.setBottomAnchor(pane, 0.0);
     }
     
-    private void selectBtn(String button){        
-        switch (button) {
+    private void selectBtn(String buttonName){        
+        switch (buttonName) {
             case "produto":
-                btnProdutos.setTextFill(Paint.valueOf(dangerColor));
-                imgProduto.setImage(new Image(urlImg + "produto-danger.png"));
+                btnProdutos.setTextFill(Color.danger);
+                imgProduto.setImage(Icon.produtoSelected);
                 
                 this.resetBtnCompra();
                 this.resetBtnRelatorio();
                 break;
             case "compra":
-                btnNovaCompra.setTextFill(Paint.valueOf(dangerColor));
-                imgCompra.setImage(new Image(urlImg + "compra-danger.png"));
+                btnNovaCompra.setTextFill(Color.danger);
+                imgCompra.setImage(Icon.compraSelected);
                 
                 this.resetBtnProduto();
                 this.resetBtnRelatorio();
                 break;
             case "relatorio":
-                btnRelatorio.setTextFill(Paint.valueOf(dangerColor));
-                imgRelatorio.setImage(new Image(urlImg + "relatorio-danger.png"));
+                btnRelatorio.setTextFill(Color.danger);
+                imgRelatorio.setImage(Icon.relatorioSelected);
                 
                 this.resetBtnCompra();
                 this.resetBtnProduto();
                 break;
+            
+            default:  // reset all
+                this.resetBtnCompra();
+                this.resetBtnProduto();
+                this.resetBtnRelatorio();
+                break;
         }
     }
     
+    private void resetBtnProduto(){
+        this.btnProdutos.setTextFill(Color.dark);        
+        imgProduto.setImage(Icon.produtoNormal);
+    }
+    
     private void resetBtnCompra(){
-        this.btnNovaCompra.setTextFill(Paint.valueOf(darkColor));
-        imgCompra.setImage(new Image(urlImg + "compra.png"));
+        this.btnNovaCompra.setTextFill(Color.dark);
+        imgCompra.setImage(Icon.compraNormal);
     }
     
     private void resetBtnRelatorio(){
-        this.btnRelatorio.setTextFill(Paint.valueOf(darkColor));
-        imgRelatorio.setImage(new Image(urlImg + "relatorio.png"));
+        this.btnRelatorio.setTextFill(Color.dark);
+        imgRelatorio.setImage(Icon.relatorioNormal);
     }
-    
-    private void resetBtnProduto(){
-        this.btnProdutos.setTextFill(Paint.valueOf(darkColor));        
-        imgProduto.setImage(new Image(urlImg + "produto.png"));
-    }
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        this.darkColor = "4f5153";
-        this.dangerColor = "ff2d36";
-        this.urlImg = "/images/icons/";
-    }
-    
 }

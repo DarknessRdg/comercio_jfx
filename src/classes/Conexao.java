@@ -1,20 +1,21 @@
 package classes;
 
-import com.mysql.jdbc.PreparedStatement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Luan
  */
 public class Conexao {
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/db_sistema_comercio";
-    private static final String USER = "root";
-    private static final String PASS = "";
+    private static final String DRIVER = "org.postgresql.Driver";
+    private static final String URL = "jdbc:postgresql://localhost:5432/db_sistema_comercio";
+    private static final String USER = "postgres";
+    private static final String PASS = "Newera1.0";
     
     public static Connection getConnection(){
         try{
@@ -25,18 +26,18 @@ public class Conexao {
             throw new RuntimeException("Connection Failed Class Not Found ; classes.Conexão: " + exception);
         }
         catch(SQLException exception){
-            throw new RuntimeException("Conection falied SQLException; classes.Conexão: " + exception);
+            System.out.println("Close Connection Failed: " + exception.toString());
         }
+        return null;
     }
        
-    private static void closeConnection(Connection conn){
+    public static void closeConnection(Connection conn){
         if(conn != null){
             try{
                 conn.close();
             }
             catch(SQLException exception){
-                throw new RuntimeException("Close Connection Failed: " + 
-                        exception);
+                System.out.println("Close Connection Failed: " + exception.toString());
             }
         }
     }
@@ -47,8 +48,7 @@ public class Conexao {
                 command.close();
             }
             catch(SQLException exception){
-                throw new RuntimeException("Close Connection Failed: " + 
-                        exception);
+                System.out.println("Close Connection Failed: " + exception.toString());
             }
             closeConnection(conn);
         }
@@ -60,7 +60,7 @@ public class Conexao {
                 result.close();
             }
             catch(SQLException exception){
-                throw new RuntimeException("Close Connection Failed: " + exception);
+                System.out.println("Close Connection Failed: " + exception.toString());
             }
             
             closeConnection(conn, command);

@@ -21,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import projetocomerciojfx.AddProduto;
 
@@ -55,12 +56,13 @@ public class FXMLProdutosController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {        
+    public void initialize(URL url, ResourceBundle rb) {
         tableColumnCOD.setCellValueFactory(new PropertyValueFactory<>("codBarras"));
         tableColumnNOME.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnPRECO.setCellValueFactory(new PropertyValueFactory<>("preco"));
         
         this.setDoubleClickTable();
+        this.pesquisarTodos();
     }
 
     @FXML
@@ -86,10 +88,12 @@ public class FXMLProdutosController implements Initializable {
     @FXML
     private void excluirProduto(ActionEvent event){
         Produto produtoSelecionado = this.getTrableRowFocudesProduto();
-        if(produtoSelecionado.delete())
-            JOptionPane.showMessageDialog(null, "Produto delete com sucesso");
-        else
-            JOptionPane.showMessageDialog(null, "Error ao deletar produto");
+        if(this.confirmar("Deseja excluir o produto " + produtoSelecionado.getNome() + " ?")){
+            if(produtoSelecionado.delete())
+                JOptionPane.showMessageDialog(null, "Produto excluído com sucesso!");
+            else
+                JOptionPane.showMessageDialog(null, "Error ao deletar produto!");
+        }          
         
         this.pesquisarTodos();
     }
@@ -151,5 +155,9 @@ public class FXMLProdutosController implements Initializable {
     private Produto getTrableRowFocudesProduto(){
         TableView.TableViewSelectionModel<Produto> selectionModel = tableProdutos.getSelectionModel();
         return selectionModel.getSelectedItem();
+    }
+    
+    private boolean confirmar(String message){
+        return JOptionPane.showConfirmDialog(null, message) == 0;
     }
 }

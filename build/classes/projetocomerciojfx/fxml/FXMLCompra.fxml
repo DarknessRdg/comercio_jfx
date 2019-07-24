@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="1005.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetocomerciojfx.controller.FXMLNovaCompraController">
+<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="1005.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetocomerciojfx.controller.FXMLNovaCompraController">
     <stylesheets>
         <URL value="@/projetocomerciojfx/css/fxmlnovacompra.css" />
     </stylesheets>

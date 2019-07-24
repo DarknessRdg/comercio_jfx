@@ -14,10 +14,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import classes.ProdutoQnt;
 import classes.Carrinho;
+import classes.Impressao;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -64,6 +66,11 @@ public class FXMLNovaCompraController implements Initializable {
         if(cod.equals("")){
             this.showMessage("Digite um código de produto válido!");
             return;
+        }else if(qnt == 0){
+            this.showMessage("Quantidade de produto zero. Altere a quantidade!");
+            return;
+        }else if(qnt < 0){
+            this.showMessage("Quantidade negativa. Altere a quantidade para uma positiva!");
         }
         
         ProdutoQnt ultimoInserido = carrinho.addProduto(cod, qnt);
@@ -94,8 +101,24 @@ public class FXMLNovaCompraController implements Initializable {
     
     @FXML
     private void finalizarCompra(ActionEvent event){
+        String desconto_entrada = JOptionPane.showInputDialog("Digite o desconto em % (porcentagem):");
+        Double desconto = 0.0;
+        try{
+            desconto = Integer.parseInt(desconto_entrada) / 100.0;
+        }catch(NumberFormatException ex){
+        }
+        
+        carrinho.addDesconto(desconto);
         String compra = carrinho.finalizarCompra(1);
-        System.out.println(compra);
+        if(compra.equals("Compra finalizada com sucesso!")){
+            Impressao impressao = new Impressao(this.carrinho.getListaProdutos(), 0);
+            impressao.imprimir();
+            
+            this.carrinho = new Carrinho();
+            this.tableCompra.getItems().clear();
+            this.atualizarCampos();
+        }
+        JOptionPane.showMessageDialog(null, compra);
     }
     
     private void showMessage(String message){
@@ -107,6 +130,8 @@ public class FXMLNovaCompraController implements Initializable {
         labelTotal.setText(carrinho.getPrecoFormated());
         textCodigoProduto.setText("");
         textQuantidade.setText("1");
+        
+        textCodigoProduto.clear();
     }
     
     private int getQuantidade(){

@@ -42,7 +42,7 @@ public class Login {
         try{
             try (PreparedStatement sttm = conn.prepareStatement(query)) {
                 result = sttm.executeQuery();
-                if(result.first()){
+                if(result.next()){
                     
                 loginDB = result.getString("username");
                 senhaDB = result.getString("senha");

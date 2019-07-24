@@ -42,8 +42,10 @@ public class ItemVenda {
             sttm.setString(4, String.format("%.2f", preco).replace(',', '.'));
             
             sttm.execute();
+            Conexao.closeConnection(conn, sttm);
             return true;
         }catch(SQLException ex){
+            Conexao.closeConnection(conn);
             System.out.println("Error save " + ex);
             return false;
         }
