@@ -15,7 +15,7 @@
         <URL value="@/projetocomerciojfx/css/fxmladdproduto.css" />
     </stylesheets>
    <children>
-      <Label layoutX="149.0" layoutY="33.0" prefHeight="42.0" prefWidth="378.0" text="ADICIONAR PRODUTO" textAlignment="CENTER">
+      <Label fx:id="textAddProduto" alignment="CENTER" layoutX="86.0" layoutY="33.0" prefHeight="42.0" prefWidth="503.0" text="ADICIONAR PRODUTO" textAlignment="CENTER">
          <font>
             <Font name="Segoe UI Bold" size="34.0" />
          </font>

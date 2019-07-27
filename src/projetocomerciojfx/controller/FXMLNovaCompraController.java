@@ -15,10 +15,23 @@ import javafx.scene.layout.AnchorPane;
 import classes.ProdutoQnt;
 import classes.Carrinho;
 import classes.Impressao;
+import estilos.colors.Color;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXToggleButton;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +43,12 @@ public class FXMLNovaCompraController implements Initializable {
     @FXML
     private AnchorPane panePrincipal;
     @FXML
+    private JFXToggleButton compraFiada;
+    @FXML
+    private JFXSpinner spinner;
+    @FXML
+    private JFXButton btnFinalizarCompra;
+    @FXML
     private TableView<ProdutoQnt> tableCompra;
     @FXML
     private JFXTextField textCodigoProduto;
@@ -39,6 +58,10 @@ public class FXMLNovaCompraController implements Initializable {
     private Label labelTotal;
     @FXML
     private Label labelMensagem;
+    @FXML
+    private ContextMenu contextMenu;
+    @FXML
+    private MenuItem menuItem;
     @FXML
     private TableColumn<ProdutoQnt, Integer> tableColumnQUANTIDADE;
     @FXML
@@ -56,6 +79,11 @@ public class FXMLNovaCompraController implements Initializable {
         tableColumnNOME.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnQUANTIDADE.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         tableColumnPRECO.setCellValueFactory(new PropertyValueFactory<>("preco"));
+    }
+    
+    private void clearAll() {
+        this.carrinho = new Carrinho();
+        this.atualizarCampos();
     }
     
     @FXML
@@ -80,6 +108,7 @@ public class FXMLNovaCompraController implements Initializable {
         }
         
         tableCompra.getItems().add(ultimoInserido);
+        
         this.atualizarCampos();
     }
     
@@ -89,36 +118,76 @@ public class FXMLNovaCompraController implements Initializable {
         if (event.getCode() != DELETE)
             return;
         
-        // pressed delete;
+        this.deletarProduto(null);
+        
+    }
+    
+    @FXML
+    private void finalizarCompra(ActionEvent event){ 
+        this.dialogFinalizarCompra();
+//        String desconto_entrada = JOptionPane.showInputDialog("Digite o desconto em % (porcentagem):");
+//        Double desconto = 0.0;
+//        try{
+//            desconto = Integer.parseInt(desconto_entrada) / 100.0;
+//        }catch(NumberFormatException ex){
+//        }
+//        
+//        carrinho.addDesconto(desconto);
+//        String compra = carrinho.finalizarCompra("");
+//        if(compra.equals("Compra finalizada com sucesso!")){
+//            Impressao impressao = new Impressao(this.carrinho, desconto);
+//            impressao.imprimir();
+//            
+//            this.carrinho = new Carrinho();
+//            this.tableCompra.getItems().clear();
+//            this.atualizarCampos();
+//        }
+//        JOptionPane.showMessageDialog(null, compra);
+    }
+    
+    @FXML
+    private void deletarProduto(ActionEvent event) {
         int indexSelected = this.getTableRowFocusedIndex();
         ProdutoQnt produtoRemover = this.getTrableRowFocudesProduto();
         
         carrinho.removerProduto(produtoRemover);
         tableCompra.getItems().remove(indexSelected);
-        
         this.atualizarCampos();
     }
     
     @FXML
-    private void finalizarCompra(ActionEvent event){
+    private void desconto(ActionEvent event){ 
         String desconto_entrada = JOptionPane.showInputDialog("Digite o desconto em % (porcentagem):");
-        Double desconto = 0.0;
-        try{
-            desconto = Integer.parseInt(desconto_entrada) / 100.0;
-        }catch(NumberFormatException ex){
-        }
+        double desconto = Double.parseDouble(desconto_entrada.replace(",", ".")) / 100;
         
-        carrinho.addDesconto(desconto);
-        String compra = carrinho.finalizarCompra(1);
-        if(compra.equals("Compra finalizada com sucesso!")){
-            Impressao impressao = new Impressao(this.carrinho.getListaProdutos(), 0);
-            impressao.imprimir();
+        ProdutoQnt produtoSelecionado = this.getTrableRowFocudesProduto();
+        produtoSelecionado.setPreco(produtoSelecionado.getPrecoDouble() * (1 - desconto));
+        this.atualizarCampos();
+    }
+    
+    private void dialogFinalizarCompra() {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/projetocomerciojfx/fxml/FXMLFinalizarCompra.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+
+            FXMLFinalizarCompraController controller = loader.getController();
+            controller.initData(this.carrinho, this.compraFiada.isSelected());
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
             
-            this.carrinho = new Carrinho();
-            this.tableCompra.getItems().clear();
-            this.atualizarCampos();
+            stage.show();
+            stage.setOnCloseRequest((e) -> {
+                
+            });
+        }catch(IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error abrir finalizacao da compra : " + ex);
         }
-        JOptionPane.showMessageDialog(null, compra);
     }
     
     private void showMessage(String message){
@@ -132,6 +201,10 @@ public class FXMLNovaCompraController implements Initializable {
         textQuantidade.setText("1");
         
         textCodigoProduto.clear();
+        tableCompra.getItems().clear();
+        for(ProdutoQnt produto: carrinho.getListaProdutos()) 
+            tableCompra.getItems().add(produto);
+        textCodigoProduto.requestFocus();
     }
     
     private int getQuantidade(){

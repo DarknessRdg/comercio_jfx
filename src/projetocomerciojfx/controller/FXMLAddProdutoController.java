@@ -24,6 +24,8 @@ import javafx.scene.paint.Paint;
  */
 public class FXMLAddProdutoController implements Initializable {
     @FXML
+    private Label textAddProduto;
+    @FXML
     private JFXButton btnSalvar;
     @FXML
     private JFXTextField textCod;
@@ -45,6 +47,7 @@ public class FXMLAddProdutoController implements Initializable {
     }
     
     public void initData(Produto produto){
+        this.textAddProduto.setText("EDITAR PRODUTO");
         this.textCod.setText(produto.getCod());
         this.textNome.setText(produto.getNome());
         this.textPreco.setText(produto.getPreco());

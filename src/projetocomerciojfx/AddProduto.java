@@ -18,6 +18,7 @@ import projetocomerciojfx.controller.FXMLAddProdutoController;
  * @author Luan
  */
 public class AddProduto extends Application {
+    public Stage stageProduto;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -27,7 +28,7 @@ public class AddProduto extends Application {
         
         stage.setScene(scene);
         stage.setResizable(false);
-            
+        this.stageProduto = stage;
         stage.show();
     }
     
@@ -43,7 +44,7 @@ public class AddProduto extends Application {
         
         stage.setScene(scene);
         stage.setResizable(false);
-            
+        this.stageProduto = stage;    
         stage.show();
     }
     

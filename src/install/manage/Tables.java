@@ -93,7 +93,8 @@ public class Tables {
                             "cpf_cliente VARCHAR(11) REFERENCES CLIENTE(cpf) ON UPDATE NO ACTION ON DELETE CASCADE," +
                             "cpf_vendedor VARCHAR(11) REFERENCES VENDEDOR(cpf) ON UPDATE NO ACTION ON DELETE CASCADE," +
                             "data_compra date default now()," +
-                            "ativo BOOLEAN DEFAULT TRUE" +
+                            "ativo BOOLEAN DEFAULT TRUE," +
+                            "paga BOOLEAN DEFAULT TRUE" +
                         ");";
         
         if (this.createTable(query, "venda"))

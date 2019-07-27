@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/install/manage/Tables.java</file>
-            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/install/Install.java</file>
-            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/models/Produto.java</file>
-            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/install/manage/Functions.java</file>
+            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/classes/Carrinho.java</file>
+            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/projetocomerciojfx/css/fxmlfinalizarcompra.css</file>
+            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/projetocomerciojfx/controller/FXMLNovaCompraController.java</file>
+            <file>file:/C:/Users/Luan/Documents/NetBeansProjects/ProjetoComercioJFX/src/projetocomerciojfx/controller/FXMLFinalizarCompraController.java</file>
         </group>
     </open-files>
 </project-private>

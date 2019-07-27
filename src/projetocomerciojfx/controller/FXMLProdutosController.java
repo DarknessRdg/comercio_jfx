@@ -136,7 +136,13 @@ public class FXMLProdutosController implements Initializable {
     
     private void editarProduto(Produto produto){
         try{
-            new AddProduto().start(new Stage(), produto);
+            
+            AddProduto addProduto = new AddProduto();
+            addProduto.start(new Stage(), produto);
+            addProduto.stageProduto.setOnCloseRequest((e) -> {
+                this.pesquisarTodos();
+            });
+            
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, "error ao abir janela de adicionar produto: " + ex);
         }

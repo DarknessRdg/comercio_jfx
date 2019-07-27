@@ -5,6 +5,8 @@
  */
 package classes;
 
+import classes.ProdutoQnt;
+import classes.Carrinho;
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -34,17 +36,16 @@ import javax.print.attribute.standard.JobName;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.JOptionPane;
+import java.lang.Math;
 /**
  *
  * @author Luan
  */
 public class Impressao {
     private static PrintService impressora;
-
-    private ArrayList<ProdutoQnt> produtos;
-    private double total;
-    private double desconto;
     
+    private Carrinho carrinho;
+    private int desconto;
     private static final int LENLINHA = 45;
     private static final int LENQNT = 9;
     private static final int LENPRECO = 9;
@@ -53,20 +54,20 @@ public class Impressao {
     
     private static final String ERROR = "Error ao tentar imprimri cupom não fiscal";
 
-    public Impressao(ArrayList<ProdutoQnt> produtos, double desconto) {
-        this.produtos = produtos;
-        total = this.calcTotal();
-        this.desconto = desconto;
+    public Impressao(Carrinho carrinho, double desconto) {
+        this.carrinho = carrinho;
+        this.desconto = 100 - (int) Math.round(carrinho.getPreco() / carrinho.getPrecoTotal() * 100);
     }
     
     public void imprimir(){
         this.lala();
     }
     
+    /*
+     * Conectar com a impressora e imprimir Notinha
+     */
     private void prepararImpressao(String texto){
-        /*
-        * Conectar com a impressora e imprimir Notinha
-        */
+        
         try{
             InputStream print = new ByteArrayInputStream("HEEELOOOO WORLDLSDSDSLLLLLL".getBytes());
             
@@ -97,36 +98,35 @@ public class Impressao {
     
     private String getTextoNotinha(){
         String notinha = 
-                  "DESENVOLVIMENTO DE SISTESMAS - LUAN RODRIGUES\n\r"
+                  "DESENVOLVIMENTO DE SISTESMAS - LUAN RODRIGUES\n"
                 
-                + "---------------------------------------------\n\r"
-                + "           CUPOM NAO FISCAL                  \n\r"
-                + "\n\r"
+                + "---------------------------------------------\n"
+                + "           CUPOM NAO FISCAL                  \n"
+                + "\n"
                 
-                + "QUANTIDADE           DESCRICAO           PREÇO\n\r"
+                + "QUANTIDADE           DESCRICAO           PREÇO\n"
                 + this.getListaProduto()
                 
-                + "---------------------------------------------\n\r"
-                + "TOTAL BRUTO" + this.formatedReal(total,  LENLINHA - "TOTAL BRUTO".length())
-                + "DESCONTO" + this.formatedReal(desconto,  LENLINHA - "DESCONTO".length())
-                + "TOTAL" + this.formatedReal(this.calcDesconto(),  LENLINHA - "TOTAL".length())
-                + "---------------------------------------------\n\r"
-                + "\n\n\r"
-                + "         OBRIGADO, VOLTE SEMPRE !            \n\r\f";
-        
+                + "---------------------------------------------\n"
+                + "TOTAL BRUTO" + this.formatedReal(carrinho.getPrecoTotal(),  LENLINHA - "TOTAL BRUTO".length()) + "\n" 
+                + "DESCONTO" + this.formatedReal(desconto,  LENLINHA - "DESCONTO".length()) + "\n"
+                + "TOTAL" + this.formatedReal(this.carrinho.getPreco(),  LENLINHA - "TOTAL".length()) + "\n"
+                + "---------------------------------------------\n"
+                + "\n\n"
+                + "         OBRIGADO, VOLTE SEMPRE !            \n\f";
+        System.out.println(notinha);
         return notinha;
     }
     
     private String getListaProduto(){
         String listaDeProdutos = "";
         
-        for(int i = 0; i < this.produtos.size(); i++){
-            ProdutoQnt produto = produtos.get(i);
+        for(ProdutoQnt produto: carrinho.getListaProdutos()){
             listaDeProdutos += this.formatedQuantidade(produto.getQuantidade())
                                + this.formatedDescricao(produto.getNome())
                                + this.formatedPreco(produto.getPreco());
             
-            listaDeProdutos += "\n\r";
+            listaDeProdutos += "\n";
         }
         
         return listaDeProdutos;
@@ -179,20 +179,6 @@ public class Impressao {
         return espacos + retorno + "\n\r";
     }
     
-    private double calcTotal(){
-        double total = 0;
-        for(int i = 0; i < this.produtos.size(); i++){
-            ProdutoQnt produto = produtos.get(i);
-            
-            total += produto.getPrecoDouble() * produto.getQuantidade();
-        }
-        return total;
-    }
-    
-    private double calcDesconto(){
-        return this.total - this.total * this.desconto;
-    }
-    
     private void lala(){
         String diretorioAtual = Paths.get(".").toAbsolutePath().normalize().toString();
         
@@ -210,7 +196,7 @@ public class Impressao {
             Desktop desk = Desktop.getDesktop();
             desk.print(file);
         } catch (IOException ex) {
-            Logger.getLogger(Impressao.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error imprimir notinha : " + ex);
         }
         
     }

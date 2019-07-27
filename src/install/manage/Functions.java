@@ -16,13 +16,13 @@ import java.sql.Statement;
 public class Functions {
     public Functions() {
         System.out.println("Cretaing function ...");
-        // produto
         this.inserirProduto();
         this.getProduto();
         this.pesquisarProduto();
         this.deletarProduto();
-        // compra
-        this.fazerCompra();
+        this.inserirVenda();
+        this.deletarVendaPermanentemente();
+        this.inserirProdutoDaCompra();
     }
     
     private void getProduto() {
@@ -85,34 +85,54 @@ public class Functions {
             System.out.println(" ERROR!");     
     }
     
-    private void fazerCompra(){
-        System.out.print("- fazer_compra ");
-        String header = "fazer_compra(array_produtos int[], id_vendedor int, id_cliente int)";
-        String returns = "setof item_venda";
-        String declare = "id_venda_variavel int; produto_loop int; prod int; cont int; preco_do_produto decimal(6,2);";
+    private void inserirVenda() {
+        System.out.print("- inserir_venda ");
+        String header = "inserir_venda (vendedor varchar, cliente varchar, venda_paga boolean) ";
+        String declare = "id_v int; id_c int;";
+        String returns = " setof venda ";
+        String body = "select id into id_v from vendedor where cpf = $1;" +
+                      "select id into id_c from cliente where cpf = $1;" +
+                      "insert into venda(id, cpf_cliente, cpf_vendedor, paga) values (default, cliente, vendedor, venda_paga);" +
+                      "return query select * from venda where id in (select max(id) from venda);";
         
-        String body = "select coalesce(max(id), 0) + 1 into id_venda_variavel from venda;" +
-                      "insert into venda(id, cpf_cliente, cpf_vendedor) values (id_venda_variavel, $2, $3);" +
-                      "foreach produto_loop in array array_produtos loop " +
-                            "if exists (select * from item_venda where id_venda = id_venda_variavel and id_produto = produto_loop) then " +
-                                "continue; " +
-                            "end if;" +
-                            "cont := 0;" +
-                            "foreach prod in array array_produtos loop " +
-                                "if prod = produto_loop then cont := cont + 1; end if;" +
-                            "end loop;" +
-                            "select preco into preco_do_produto from produto where id = produto_loop; " +
-                            "insert into item_venda(id, id_venda, id_produto, qnt_produto, preco_produto) values (default, id_venda_variavel, produto_loop, cont, preco_do_produto);" +   
-                        "end loop;" +
-                "return query select * from item_venda where id_venda = id_venda_variavel;";
-                      
         if (createFunction(header, declare, returns, body))
             System.out.println(" OK!");
         else
             System.out.println(" ERROR!");     
     }
     
-    private boolean createFunction(String header, String declare,String returns, String body) {
+    private void deletarVendaPermanentemente(){
+        System.out.print("- deletar_venda_permanentemente ");
+        String header = "deletar_venda_permanentemente(id_ int)";
+        String returns = "varchar";
+        String body = "if not exists (select * from venda where id = $1) then " +
+                            "return 'Não existe uma venda com o id passadao.';" +
+                       "end if;" +
+                       "delete from venda where id = $1;" +
+                       "return 'Venda deletada com sucesso.';";
+        
+        if (createFunction(header, returns, body))
+            System.out.println(" OK!");
+        else
+            System.out.println(" ERROR!");     
+    }
+    
+    private void inserirProdutoDaCompra(){
+        System.out.print("- inserir_produto_da_compra ");
+        String header = "inserir_produto_da_compra(id_c int, id_p int, preco_p double precision, qnt int)";
+        String returns = "setof item_venda ";
+        String body = "insert into item_venda(id, id_venda, id_produto, qnt_produto, preco_produto) values " +
+                "(default, id_c, id_p, qnt, cast(preco_p as decimal(6,2))); " + 
+                "return query select * from item_venda where id_venda = id_c and id_produto = id_p and " +
+                "qnt_produto = qnt and preco_produto = preco_p;";
+        
+        if (createFunction(header, returns, body))
+            System.out.println(" OK!");
+        else
+            System.out.println(" ERROR!");
+    }
+    
+    private boolean createFunction(String header, String declare, String returns, String body) {
         String query = "CREATE OR REPLACE FUNCTION " + header.toUpperCase() + " RETURNS " + returns.toUpperCase() + 
                 " AS $$" +
                 " DECLARE " + declare +

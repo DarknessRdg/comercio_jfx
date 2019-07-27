@@ -17,4 +17,8 @@ public class ProdutoQnt extends Produto{
     public int getQuantidade(){
         return this.quantidade;
     }
+    
+    public boolean igual(ProdutoQnt other) {
+        return this.equals(other) && this.quantidade == other.getQuantidade();
+    }
 }

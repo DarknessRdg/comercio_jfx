@@ -139,13 +139,13 @@ public class Venda {
     
     private int getLastIdVenda(){
         Connection conexao = Conexao.getConnection();
-        String query = "SELECT * FROM VENDA";
+        String query = "SELECT MAX(ID) id_venda FROM VENDA";
         PreparedStatement sttm;
         
         try{
             sttm = conexao.prepareStatement(query);
             ResultSet result = sttm.executeQuery();
-            result.last();
+            result.next();
             Conexao.closeConnection(conexao, sttm);
             return result.getInt("id_venda");
         }catch (SQLException ex){

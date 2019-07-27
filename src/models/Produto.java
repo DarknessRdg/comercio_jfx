@@ -125,16 +125,14 @@ public class Produto {
         
     private void setProduto(String cod_barras){
         Connection conn = Conexao.getConnection();
-        String query = "SELECT * GET_PRODUTO(?)";
-        
+        String query = "select * from get_produto(?)";
         try{
             PreparedStatement sttm = conn.prepareStatement(query);
             
             sttm.setString(1, cod_barras);
-            
             ResultSet result = sttm.executeQuery();
             
-            result.first();
+            result.next();
             this.id = result.getInt("id");
             this.codBarras = result.getString("cod_barras");
             this.nome = result.getString("nome");
@@ -169,7 +167,7 @@ public class Produto {
                         result.getString("nome"),
                         result.getDouble("preco"))
                     );
-            } // end while
+            }
             
             Conexao.closeConnection(conn, sttm, result);
         } catch (SQLException ex) {
