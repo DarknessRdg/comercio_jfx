@@ -1,10 +1,11 @@
 package models;
 
-import classes.Conexao;
+import connectionDatabase.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,11 +15,7 @@ public class Vendedor {
     private String nome;
     private String cpf;
     private int id_login;
-    
-    public Vendedor(String cpf){
-        this.cpf = cpf;
-        this.setVendor();
-    }
+    private static final String ERROR_GET_VENDEDOR = "Error get vendedor:\n";
     
     public Vendedor(String cpf, String nome, int id_login){
         this.cpf = cpf;
@@ -26,8 +23,37 @@ public class Vendedor {
         this.id_login = id_login;
     }
     
+    public Vendedor(String cpf){
+        this.cpf = cpf;
+        
+        try {
+            this.setVendor();
+        } catch(SQLException exception) {
+            JOptionPane.showMessageDialog(null, ERROR_GET_VENDEDOR + exception.toString());
+            this.nome = null;
+        }
+    }
+    
+    public Vendedor(ResultSet result) {
+        try {
+            setVendedorFromResult(result);
+        } catch(SQLException exception) {
+            JOptionPane.showMessageDialog(null, ERROR_GET_VENDEDOR + exception.toString());
+            this.nome = null;
+        }
+    }
+    
     public String getNome(){
         return this.nome;
+    }
+    
+    public String getNomeCapitalized() {
+        String nameCapitalized = "";
+        for(String name: nome.split(" ")) {
+            nameCapitalized += name.substring(0, 1).toUpperCase() + name.substring(1) + " ";
+        }
+        
+        return nameCapitalized;
     }
     
     public boolean save(){
@@ -146,27 +172,30 @@ public class Vendedor {
         }
     }
     
-    private void setVendor(){
+    private void setVendor() throws SQLException {
         Connection conn = Conexao.getConnection();
+        PreparedStatement sttm = null;
+        ResultSet result = null;
         String query = "SELECT * FROM VENDEDOR WHERE CPF = ? ";
         
         try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
+            sttm = conn.prepareStatement(query);
             sttm.setString(1, this.cpf);
             
-            ResultSet result = sttm.executeQuery();
-            
+            result = sttm.executeQuery();
             result.next();
-            this.cpf = result.getString("cpf");
-            this.nome = result.getString("nome");
-            this.id_login = result.getInt("id_login");
             
-            Conexao.closeConnection(conn, sttm, result);
+            setVendedorFromResult(result);
         }catch(SQLException ex){
             System.out.println("Error getVendedor " + ex);
-            this.nome = null;
-            Conexao.closeConnection(conn);
+            
         }
+        Conexao.closeConnection(conn, sttm, result);
+    }
+    
+    private void setVendedorFromResult(ResultSet result) throws SQLException {
+        cpf = result.getString("cpf");
+        nome = result.getString("nome");
+        id_login = result.getInt("id_login");
     }
 }

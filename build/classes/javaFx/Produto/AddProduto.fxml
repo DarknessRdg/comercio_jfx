@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="603.0" prefWidth="677.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" stylesheets="@fxmladdproduto.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Produto.AddProdutoController">
+   <children>
+      <Label fx:id="textAddProduto" alignment="CENTER" layoutX="86.0" layoutY="33.0" prefHeight="42.0" prefWidth="503.0" text="ADICIONAR PRODUTO" textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Bold" size="34.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="textCod" labelFloat="true" layoutX="99.0" layoutY="145.0" onKeyReleased="#codReleased" prefHeight="48.0" prefWidth="490.0" promptText="CÓDIGO">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="textNome" labelFloat="true" layoutX="93.0" layoutY="254.0" onKeyReleased="#nomeReleased" prefHeight="48.0" prefWidth="490.0" promptText="NOME">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="textPreco" labelFloat="true" layoutX="94.0" layoutY="366.0" onKeyReleased="#precoReleased" prefHeight="48.0" prefWidth="490.0" promptText="PREÇO ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton fx:id="btnSalvar" defaultButton="true" disable="true" layoutX="252.0" layoutY="484.0" onAction="#salvar" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #1A86DB;" text="SALVAR" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </JFXButton>
+      <Label fx:id="labelFeedback" alignment="CENTER" contentDisplay="CENTER" layoutX="92.0" layoutY="436.0" prefHeight="17.0" prefWidth="490.0" textAlignment="CENTER" textFill="#f11b1b">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

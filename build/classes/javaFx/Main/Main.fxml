@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="564.0" minWidth="1101.0" prefHeight="564.0" prefWidth="1101.0" style="-fx-background-color: #BABABC;" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Main.MainController">
+   <children>
+      <AnchorPane fx:id="anchorMenu" layoutX="80.0" layoutY="131.0" maxWidth="221.0" minWidth="10.0" prefHeight="564.0" prefWidth="200.0" style="-fx-background-color: gray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="901.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox layoutX="48.0" layoutY="93.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="221.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Pane fx:id="panePerfil" prefHeight="179.0" prefWidth="173.0">
+                     <children>
+                        <Label fx:id="labelVendedorName" alignment="CENTER" contentDisplay="CENTER" prefHeight="105.0" prefWidth="200.0" text="Luan da Silva Rodrigues" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                           <font>
+                              <Font name="Arial Narrow Bold" size="24.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                     </children></Pane>
+                  <JFXButton fx:id="btnProdutos" alignment="TOP_LEFT" onAction="#abrirProdutos" prefHeight="62.0" prefWidth="191.0" ripplerFill="#348690" text="  Produtos" textFill="#4f5153">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="imgProduto" fitHeight="37.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnNovaCompra" alignment="TOP_LEFT" onAction="#abrirCompra" prefHeight="62.0" prefWidth="191.0" ripplerFill="#35868f" text="  Compra" textFill="#4f5153">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="imgCompra" fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="btnRelatorio" alignment="TOP_LEFT" onAction="#abrirRelatorio" prefHeight="51.0" prefWidth="191.0" ripplerFill="#348690" text="  Relatório" textFill="#4f5153">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="imgRelatorio" fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="anchorConteudo" layoutX="198.0" layoutY="306.0" prefHeight="564.0" prefWidth="903.0" style="-fx-background-color: #F4F4F4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="198.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.textfield.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="620.0" prefWidth="499.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Compra.FinalizarCompraController">
+   <children>
+      <AnchorPane fx:id="paneSpinner" prefHeight="620.0" prefWidth="499.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXSpinner layoutX="225.0" layoutY="274.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="224.0" AnchorPane.topAnchor="274.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="paneMenu" prefHeight="620.0" prefWidth="499.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="labelTotal" alignment="CENTER" prefHeight="64.0" prefWidth="204.0" text="Total: R$ 00,00" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelTroco" alignment="CENTER" prefHeight="64.0" prefWidth="204.0" text="Troco: R$ 00,00" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Separator layoutX="245.0" layoutY="25.0" orientation="VERTICAL" prefHeight="55.0" prefWidth="10.0" AnchorPane.topAnchor="25.0" />
+            <JFXTextField fx:id="textDinheiro" alignment="CENTER" focusColor="#0275d8" labelFloat="true" layoutX="46.0" layoutY="158.0" prefHeight="41.0" prefWidth="390.0" promptText="Dinheiro pago" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField fx:id="textCPF" alignment="CENTER" focusColor="#0275d8" labelFloat="true" layoutX="46.0" layoutY="268.0" onKeyReleased="#fomartarCpf" prefHeight="41.0" prefWidth="390.0" promptText="CPF do Cliente" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField fx:id="textDesconto" alignment="CENTER" focusColor="#0275d8" labelFloat="true" layoutX="51.0" layoutY="390.0" prefHeight="42.0" prefWidth="419.0" promptText="Desconto na compra (em %)" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </JFXTextField>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="paneButtons" layoutX="87.0" layoutY="544.0" prefHeight="42.0" prefWidth="339.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0">
+         <children>
+            <JFXButton buttonType="RAISED" layoutX="-4.0" layoutY="2.0" onAction="#cancelar" prefHeight="42.0" prefWidth="126.0" style="-fx-background-color: #d9534f;" text="Cancelar" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="6.0" layoutY="12.0" onAction="#finalizar" prefHeight="42.0" prefWidth="126.0" style="-fx-background-color: #5cb85c;" text="Finalizar" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,193 +1,160 @@
 package models;
 
-import classes.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import connectionDatabase.Conexao;
+import java.io.IOException;
+import java.util.ArrayList;
+import javafx.scene.Cursor;
+import javax.swing.JOptionPane;
+
 
 /**
- *
- * @author Luan
+ * Class to verify login to database of given username and password
+ * @author Luan Rorigues
  */
 public class Login {
-    private int id;
+    private String loginDB;
+    private String senhaDB;
     private String login;
     private String senha;
+    private int id;
     
-    
-    public Login(int id){
-        this.id = id;
-        this.setLogin(id);
-    }
-    
-    public Login(String login){
-        this.login = login;
-        this.setLogin();
-    }
-    
-    public Login(String login, String senha){
+    public Login(String login, String senha) {
+        loginDB = "-z }{/;d s kJDdsUnsJOOUsndsçald 2 23 32 sd/.  sa";
+        senhaDB = "-z;}{/d s kJDdsUnsJOOUsndsçald 2 23 32 sd/. sadsa213231s";
         this.login = login;
         this.senha = senha;
         this.id = -1;
-    }
-    
-    public String getLogin(){
-        return this.login;
-    }
-    
-    public int getId(){
-        return this.id;
-    }
-    
-    public void mudarSenha(String nova){
-        this.senha = nova;
-    }
-    
-    public boolean save(){
-        if(!this.exists()){
-            if(this.login != null && this.senha != null)
-                return this.inserirLogin();
-            else
-                return false;
-        }
-        else
-            return this.updateLogin();
-    }
-    
-    public boolean delete(){
-        return this.removerLogin();
-    }
-    
-    private boolean updateLogin(){
-        Connection conn = Conexao.getConnection();
-        String query = "UPDATE LOGIN SET SENHA = ? WHERE ID_LOGIN = ?";
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            sttm.setString(1, senha);
-            sttm.setInt(2, id);
-            
-            sttm.execute();
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error updateLogin " + ex);
-            
-            Conexao.closeConnection(conn);
-            return false; 
-        }
-    }
-    
-    private boolean removerLogin(){
-        Connection conn = Conexao.getConnection();
-        String query = "DELETE FROM LOGIN WHERE ID_LOGIN = ?";
         
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setInt(1, this.id);
-            sttm.execute();
-            
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error removerLogin " + ex);
-            Conexao.closeConnection(conn);
-            return false;
-        }
+        this.getLoginOnDB();
     }
-    private boolean inserirLogin(){
-        Connection conn = Conexao.getConnection();
-        String query = "INSERT INTO LOGIN(USERNAME, SENHA) VALUES (?, ?) ";
-        
+    
+    public Login(ResultSet result) {
+        Login newLogin = Login.getLogin(result);
+        if (newLogin == null )
+            return;
+        loginDB = newLogin.getLoginDB();
+        senhaDB = newLogin.getSenhaDB();
+    }
+    
+    public String getLogin() {
+        return loginDB;
+    }
+    
+    private String getLoginDB() {
+        return loginDB;
+    }
+    
+    private String getSenhaDB() {
+        return senhaDB;
+    }
+    
+    public boolean logued(){
+        return loginDB.equals(login) && senhaDB.equals(senha) && id > -1;
+    }
+    
+    public Vendedor getVendedor() {
         try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setString(1, this.login);
-            sttm.setString(2, this.senha);
-            
-            sttm.execute();
-            
-            this.setLogin();
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error inserirLogin " + ex);
-            Conexao.closeConnection(conn);
-            return false;
+            return getVendedorOnDatabase();
+        } catch(SQLException exceptiton) {
+            System.out.println(exceptiton);
+            return null;
         }
     }
     
-    private boolean exists(){
-        Connection conn = Conexao.getConnection();
-        String query = "SELECT * FROM LOGIN WHERE LOGIN = ? ";
-        
+    private void getLoginOnDB(){
         try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setString(1, this.login);
-            
-            ResultSet result = sttm.executeQuery();
-            
-            result.first();
-            result.getInt("id");
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            Conexao.closeConnection(conn);
-            return false;
+            selectLoginOnDatabase();
+        }catch(SQLException exception){
+            JOptionPane.showMessageDialog(null, "ERROR GETLOGIN ON DB: " + exception);
         }
     }
     
-    private void setLogin(int id){
+    private void selectLoginOnDatabase() throws SQLException {
         Connection conn = Conexao.getConnection();
-        String query = "SELECT * FROM LOGIN WHERE ID = ? ";
+        String query = "SELECT * FROM LOGIN WHERE USERNAME = '" + login.toLowerCase() + "'";
+        ResultSet result;
         
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setInt(1, this.id);
-            
-            ResultSet result = sttm.executeQuery();
-            
-            result.first();
-            this.id = result.getInt("id");
-            this.login = result.getString("username");
-            this.senha = result.getString("senha");
-            
-            Conexao.closeConnection(conn, sttm);
-        }catch(SQLException ex){
-            System.out.println("Error setLogin" + ex);
-            this.login = null;
-            this.senha = null;
-            
-            Conexao.closeConnection(conn);
+        PreparedStatement sttm = conn.prepareStatement(query);
+        result = sttm.executeQuery();
+        
+        if(result.next()) {
+            loginDB = result.getString("username");
+            senhaDB = result.getString("senha");
+            id = result.getInt("id");
         }
+        Conexao.closeConnection(conn, sttm, result);
     }
     
-    private void setLogin(){
+    private Vendedor getVendedorOnDatabase() throws SQLException {
         Connection conn = Conexao.getConnection();
-        String query = "SELECT * FROM LOGIN WHERE LOGIN = ? ";
+        String query = "SELECT V.*, ID_LOGIN FROM LOGIN L JOIN VENDEDOR V ON L.ID = V.ID_LOGIN"
+                + " WHERE L.USERNAME = '" + login.toLowerCase() + "'";
         
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setString(1, this.login);
-            
-            ResultSet result = sttm.executeQuery();
-            
-            result.first();
-            this.id = result.getInt("id_login");
-            this.login = result.getString("login");
-            this.senha = result.getString("senha");
-            
-            Conexao.closeConnection(conn, sttm);
-        }catch(SQLException ex){
-            System.out.println("Error setLogin" + ex);
-            this.senha = null;
-            this.id = -1;
-            
-            Conexao.closeConnection(conn);
+        PreparedStatement sttm = conn.prepareStatement(query);
+        ResultSet result = sttm.executeQuery();
+        result.next();
+        
+        Vendedor vendedor = new Vendedor(result);
+        Conexao.closeConnection(conn, sttm, result);
+        
+        return vendedor;
+    }
+    
+    public static Login getLogin(ResultSet result) {
+        Login newLogin = null;
+        try {
+            newLogin = Login.getLoginFromResult(result);
+            result.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error getLogin(ResultSet): " + ex);
         }
+        
+        return null;
+    }
+    
+    public static ArrayList<Login> all() {
+        ArrayList<Login> lista = new ArrayList<>();
+        try {
+            lista = Login.filterOnDataBase(null);
+        } catch (SQLException exception) {
+            JOptionPane.showMessageDialog(null, "Error getAll Login: " + exception);
+        }
+        return lista;
+    }
+    
+    public static ArrayList<Login> filter(String filter) {
+        ArrayList<Login> lista = new ArrayList<>();
+        try {
+            lista = Login.filterOnDataBase(filter);
+        } catch (SQLException exception) {
+            JOptionPane.showMessageDialog(null, "Error getFilter Login: " + exception);
+        }
+        return lista;
+    }
+    
+    private static ArrayList<Login> filterOnDataBase(String filter) throws SQLException {
+        ArrayList<Login> queryList = new ArrayList<>();
+        filter = filter == null ? " " : filter;
+        
+        String query = "SELECT * FROM LOGIN " + filter;
+        
+        Connection connection = Conexao.getConnection();
+        PreparedStatement sttm = connection.prepareStatement(query);
+        ResultSet result = sttm.executeQuery();
+        
+        while (result.next())
+            queryList.add(Login.getLoginFromResult(result));
+        
+        Conexao.closeConnection(connection, sttm, result);
+        return queryList;
+    }
+    
+    private static Login getLoginFromResult(ResultSet result) throws SQLException {
+        Login newLogin = new Login(result.getString("username"), result.getString("senha"));
+        return newLogin;
     }
 }
