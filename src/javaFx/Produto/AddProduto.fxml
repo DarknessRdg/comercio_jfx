@@ -10,36 +10,55 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="603.0" prefWidth="677.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" stylesheets="@fxmladdproduto.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Produto.AddProdutoController">
+<AnchorPane id="AnchorPane" prefHeight="636.0" prefWidth="510.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" stylesheets="@fxmladdproduto.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.produto.AddProdutoController">
    <children>
-      <Label fx:id="textAddProduto" alignment="CENTER" layoutX="86.0" layoutY="33.0" prefHeight="42.0" prefWidth="503.0" text="ADICIONAR PRODUTO" textAlignment="CENTER">
+      <AnchorPane layoutX="94.0" layoutY="151.0" prefHeight="315.0" prefWidth="465.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0">
+         <children>
+            <JFXTextField fx:id="textCod" alignment="CENTER" labelFloat="true" layoutX="-7.0" onKeyReleased="#codReleased" prefHeight="48.0" prefWidth="490.0" promptText="Código de barras" unFocusColor="BLACK" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField fx:id="textNome" alignment="CENTER" labelFloat="true" layoutY="110.0" onKeyReleased="#nomeReleased" prefHeight="48.0" prefWidth="490.0" promptText="Nome do produto" unFocusColor="BLACK" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField fx:id="textPreco" alignment="CENTER" labelFloat="true" layoutY="223.0" onKeyReleased="#precoReleased" prefHeight="48.0" prefWidth="490.0" promptText="Preço de venda de cada unidade" unFocusColor="BLACK" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextField>
+            <Label fx:id="labelFeedback" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="351.0" textAlignment="CENTER" textFill="#f11b1b" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label fx:id="textAddProduto" alignment="CENTER" layoutX="86.0" layoutY="33.0" prefHeight="64.0" prefWidth="582.0" style="-fx-background-color: #1a237e;" text="ADICIONAR PRODUTO" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
          <font>
             <Font name="Segoe UI Bold" size="34.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="textCod" labelFloat="true" layoutX="99.0" layoutY="145.0" onKeyReleased="#codReleased" prefHeight="48.0" prefWidth="490.0" promptText="CÓDIGO">
+      <Label layoutY="6.0" prefHeight="20.0" prefWidth="677.0" style="-fx-background-color: #000051;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane layoutX="100.0" layoutY="500.0" prefHeight="48.0" prefWidth="370.0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0">
+         <children>
+            <JFXButton fx:id="btnCancelar" defaultButton="true" onAction="#close" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #b71c1c;" text="CANCELAR" textFill="WHITE" AnchorPane.leftAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="btnSalvar" defaultButton="true" disable="true" onAction="#salvar" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #4059a9;" text="SALVAR" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      <Label layoutX="297.0" layoutY="548.0" prefHeight="64.0" prefWidth="138.0" text="* preencha todos os campos para ativar o botão" wrapText="true">
          <font>
-            <Font size="18.0" />
-         </font>
-      </JFXTextField>
-      <JFXTextField fx:id="textNome" labelFloat="true" layoutX="93.0" layoutY="254.0" onKeyReleased="#nomeReleased" prefHeight="48.0" prefWidth="490.0" promptText="NOME">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </JFXTextField>
-      <JFXTextField fx:id="textPreco" labelFloat="true" layoutX="94.0" layoutY="366.0" onKeyReleased="#precoReleased" prefHeight="48.0" prefWidth="490.0" promptText="PREÇO ">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </JFXTextField>
-      <JFXButton fx:id="btnSalvar" defaultButton="true" disable="true" layoutX="252.0" layoutY="484.0" onAction="#salvar" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #1A86DB;" text="SALVAR" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </JFXButton>
-      <Label fx:id="labelFeedback" alignment="CENTER" contentDisplay="CENTER" layoutX="92.0" layoutY="436.0" prefHeight="17.0" prefWidth="490.0" textAlignment="CENTER" textFill="#f11b1b">
-         <font>
-            <Font name="System Bold" size="18.0" />
+            <Font size="13.0" />
          </font>
       </Label>
    </children>

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package javaFx.Produto;
+package javaFx.produto;
 
+import javafx.stage.Stage;
 import models.Produto;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -17,8 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 
+import javax.swing.*;
+
 /**
- * FXML Controller class
  *
  * @author Luan
  */
@@ -28,6 +25,8 @@ public class AddProdutoController implements Initializable {
     @FXML
     private JFXButton btnSalvar;
     @FXML
+    private JFXButton btnCancelar;
+    @FXML
     private JFXTextField textCod;
     @FXML
     private JFXTextField textNome;
@@ -35,8 +34,13 @@ public class AddProdutoController implements Initializable {
     private JFXTextField textPreco;
     @FXML
     private Label labelFeedback;
-    private boolean editar = false;
-
+    private boolean stageAsEditar = false;
+    private String COLOR_SUCCESS = "004d40";
+    private String COLOR_ERROR = "b71c1c";
+    private String SAVED_SUCCESS = "Produto adicionado com sucesso!";
+    private String EDITED_SUCCESS = "Produto editado com sucesso!";
+    private String SAVED_WRONG = "Error ao adicionar produto!";
+    private String EDITED_WRONG = "Error ao editar produto!";
 
     /**
      * Initializes the controller class.
@@ -53,34 +57,82 @@ public class AddProdutoController implements Initializable {
         this.textPreco.setText(produto.getPreco());
         
         this.btnSalvar.setDisable(false);
+        stageAsEditar = true;
     }
 
     @FXML
     private void salvar(ActionEvent event) {
+        var codBarras = textCod.getText();
+
+        if (Produto.exists(codBarras) && !stageAsEditar)
+            confirmUpdateProduto();
+        else
+            saveProduto();
+    }
+
+    private void confirmUpdateProduto() {
+        var YES = 0; var NO = 1; var CANCEL = 2;
+        var confirmMessage = "Já existe um produto salvo com este código de barras. Deseja alterar os dados deste produto?";
+        var choice = JOptionPane.showConfirmDialog(null, confirmMessage);
+
+        if (choice == YES) {
+            saveProduto();
+        }
+
+        cleanFields();
+    }
+
+    private void saveProduto() {
         String cod = textCod.getText();
         String nome = textNome.getText();
         double preco = Double.parseDouble(textPreco.getText().replace(',', '.'));
-        
+
         Produto produto = new Produto(cod, nome, preco);
-        if (produto.save()){
-            labelFeedback.setText("Produto adicionado com sucesso !");
-            labelFeedback.setTextFill(Paint.valueOf("#18d63e"));
-            labelFeedback.setVisible(true);
-            
-            this.clean();
-        }else{
-            labelFeedback.setText("Error ao adicionar produto. Tente novamente.");
-            labelFeedback.setTextFill(Paint.valueOf("#f11b1b"));
-            labelFeedback.setVisible(true);
-        }
+        if (produto.save())
+            showMessageSuccess();
+        else
+            showMessageError();
+    }
+
+    private void showMessageSuccess() {
+        String message;
+        if (stageAsEditar)
+            message = EDITED_SUCCESS;
+        else
+            message = SAVED_SUCCESS;
+
+        labelFeedback.setText(message);
+        labelFeedback.setTextFill(Paint.valueOf("#" + COLOR_SUCCESS));
+        labelFeedback.setVisible(true);
+    }
+
+    private void showMessageError() {
+        String message;
+        if (stageAsEditar)
+            message = EDITED_WRONG;
+        else
+            message = SAVED_WRONG;
+
+        labelFeedback.setText(message);
+        labelFeedback.setTextFill(Paint.valueOf("#" + COLOR_ERROR));
+        labelFeedback.setVisible(true);
+
+    }
+
+    @FXML
+    private void close(ActionEvent event) {
+        var stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
     
-    private void clean(){
-        textNome.setText("");
-        textPreco.setText("");
-        textCod.setText("");
-        
-        btnSalvar.setDisable(true);
+    private void cleanFields() {
+        if (!stageAsEditar) {
+            textNome.setText("");
+            textPreco.setText("");
+            textCod.setText("");
+
+            btnSalvar.setDisable(true);
+        }
     }
     
     @FXML
@@ -105,10 +157,10 @@ public class AddProdutoController implements Initializable {
         nome = textNome.getText();
         preco = textPreco.getText();
         
-        if (!this.stringEmpty(cod) && 
-            !this.stringEmpty(nome) &&
-            !this.stringEmpty(preco) &&
-            this.isNumber(preco))
+        if (!stringEmpty(cod) &&
+            !stringEmpty(nome) &&
+            !stringEmpty(preco) &&
+             isNumber(preco))
                 btnSalvar.setDisable(false);
         else
             btnSalvar.setDisable(true);
@@ -117,7 +169,7 @@ public class AddProdutoController implements Initializable {
     private boolean isNumber(String string){
         int contVigula = 0, contPonto = 0;
         
-        for(int i = 0; i < string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             switch (string.charAt(i)) {
                 case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8':
                 case '9': case '0':
@@ -130,7 +182,7 @@ public class AddProdutoController implements Initializable {
                     break;
                 default:
                     return false;
-            } // end switch
+            }
         }
         
         if ((contPonto == 1 && contVigula == 0) || 

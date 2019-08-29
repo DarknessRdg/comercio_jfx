@@ -1,4 +1,4 @@
-package javaFx.Compra;
+package javaFx.compra;
 
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;

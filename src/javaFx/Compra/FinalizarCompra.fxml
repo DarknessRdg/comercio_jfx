@@ -2,7 +2,6 @@
 
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
-<?import org.controlsfx.control.textfield.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -11,7 +10,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="620.0" prefWidth="499.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Compra.FinalizarCompraController">
+<AnchorPane
+        id="AnchorPane"
+        prefHeight="620.0" prefWidth="499.0"
+        style="-fx-background-color: white;"
+        styleClass="mainFxmlClass"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="javaFx.compra.FinalizarCompraController">
    <children>
       <AnchorPane fx:id="paneSpinner" prefHeight="620.0" prefWidth="499.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

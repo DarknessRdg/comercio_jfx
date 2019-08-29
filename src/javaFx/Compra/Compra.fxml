@@ -11,21 +11,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="1005.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" stylesheets="@fxmlnovacompra.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFx.Compra.CompraController">
+<AnchorPane id="AnchorPane" prefHeight="546.0" prefWidth="1005.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" stylesheets="@fxmlnovacompra.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="javaFx.compra.CompraController">
    <children>
       <AnchorPane fx:id="panePrincipal" layoutX="51.0" layoutY="67.0" prefHeight="438.0" prefWidth="955.0" style="-: ;" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <children>
-            <JFXTextField fx:id="textCodigoProduto" labelFloat="true" layoutX="14.0" layoutY="30.0" prefHeight="45.0" prefWidth="208.0" promptText="Código do produto" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="30.0">
+            <JFXTextField fx:id="textCodigoProduto" labelFloat="true" layoutX="1.0" layoutY="30.0" prefHeight="45.0" prefWidth="249.0" promptText="Código do produto" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
                <font>
                   <Font size="19.0" />
                </font>
             </JFXTextField>
-            <JFXTextField fx:id="textQuantidade" alignment="CENTER" labelFloat="true" layoutX="254.0" layoutY="30.0" prefHeight="45.0" prefWidth="83.0" promptText="Quantidade" text="1" AnchorPane.topAnchor="30.0">
+            <JFXTextField fx:id="textQuantidade" alignment="CENTER" labelFloat="true" layoutX="272.0" layoutY="30.0" prefHeight="45.0" prefWidth="82.0" promptText="Quantidade" text="1" AnchorPane.topAnchor="30.0">
                <font>
                   <Font size="19.0" />
                </font>
             </JFXTextField>
-            <JFXButton defaultButton="true" layoutX="512.0" layoutY="37.0" onAction="#addProduto" prefHeight="38.0" prefWidth="129.0" ripplerFill="WHITE" snapToPixel="false" style="-fx-background-color: #0275d8;" text="ADICIONAR" textFill="WHITE">
+            <JFXButton defaultButton="true" layoutX="531.0" layoutY="37.0" onAction="#addProduto" prefHeight="38.0" prefWidth="110.0" ripplerFill="WHITE" snapToPixel="false" style="-fx-background-color: #0d47a1;" text="ADICIONAR" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -59,7 +59,7 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <JFXToggleButton fx:id="compraFiada" layoutX="354.0" layoutY="23.0" text="Compra fiada" toggleColor="#0275d8" toggleLineColor="#689cc6">
+            <JFXToggleButton fx:id="compraFiada" layoutX="354.0" layoutY="23.0" text="Compra fiada" toggleColor="#002171" toggleLineColor="#0d47a1">
                <font>
                   <Font size="14.0" />
                </font>
@@ -71,9 +71,9 @@
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btnFinalizarCompra" alignment="CENTER" layoutX="675.0" layoutY="507.0" onAction="#finalizarCompra" prefHeight="38.0" prefWidth="167.0" style="-fx-background-color: #5cb85c;" text="FINALIZAR COMPRA" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0">
+      <JFXButton fx:id="btnFinalizarCompra" alignment="CENTER" layoutX="675.0" layoutY="507.0" onAction="#finalizarCompra" prefHeight="38.0" prefWidth="184.0" style="-fx-background-color: #00695c;" text="FINALIZAR COMPRA" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </JFXButton>
    </children>

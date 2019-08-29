@@ -21,6 +21,18 @@ public class Conexao {
     private static final String ERROR_CLOSE_CONNECTION = "Close Connection Failed:"
             + "Feche o programa e abra novamente!\n";
     
+    private static final String ERROR_CLASS_NOT_FOUND = "Class Not Found: " ;
+    
+    public static boolean ableToConnectToDatabase() {
+        try {
+            Connection connection = DriverManager.getConnection(URL, USER, PASS);
+            connection.close();
+            return true;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+    
     public static Connection getConnection(){
         try { 
             return getConnectionDatabase();
@@ -72,7 +84,7 @@ public class Conexao {
             getClassToConnect();
             connection = DriverManager.getConnection(URL, USER, PASS);
         } catch (ClassNotFoundException exception) {
-           JOptionPane.showMessageDialog(null, ERROR_CLOSE_CONNECTION + exception.toString());
+           JOptionPane.showMessageDialog(null, ERROR_CLASS_NOT_FOUND + exception.toString());
         }
         
         return connection;

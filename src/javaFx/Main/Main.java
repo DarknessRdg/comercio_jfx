@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package javaFx.Main;
+package javaFx.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +30,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("Main.fxml"));
         Parent root = loader.load();
-        
+
         Scene scene = new Scene(root);
         
         MainController controller = loader.getController();
@@ -43,7 +38,8 @@ public class Main extends Application {
         
         stage.setScene(scene);
         stage.setMaximized(true);
-            
+        stage.setTitle("Comércio");
+
         stage.show();
     }
 }

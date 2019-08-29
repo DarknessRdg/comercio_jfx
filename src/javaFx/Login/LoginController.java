@@ -1,5 +1,9 @@
-package javaFx.Login;
+package javaFx.login;
 
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javaFx.styles.colors.Color;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -9,11 +13,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
-import models.Login;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import models.Login;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
-import javaFx.Main.Main;
+import javaFx.main.Main;
 
 
 /**
@@ -22,6 +27,8 @@ import javaFx.Main.Main;
  * @author Luan Rodrigues
  */
 public class LoginController implements Initializable {
+    @FXML
+    private AnchorPane paneForIconClose;
     @FXML
     private JFXTextField textUsername;
     @FXML
@@ -34,10 +41,16 @@ public class LoginController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        btnLogin.setOnAction(event -> {
-            entrar();
-        });
+        Text iconClose = GlyphsDude.createIcon(FontAwesomeIcon.CLOSE, "27px");
+        iconClose.setFill(Color.LIGHT);
+        paneForIconClose.getChildren().add(iconClose);
+        var btn = paneForIconClose.getChildren().get(0);
+        paneForIconClose.getChildren().remove(0);
+        paneForIconClose.getChildren().add(btn);
+
+
+        AnchorPane.setTopAnchor(iconClose, 8.0);
+        AnchorPane.setRightAnchor(iconClose, 10.0);
     }
     
     @FXML
@@ -46,11 +59,7 @@ public class LoginController implements Initializable {
     }
     
     @FXML // onClick
-    public void entrar(MouseEvent event){
-        entrar();
-    }
-    
-    public void entrar(){
+    public void entrar(ActionEvent event){
         getUser();
         if (user == null)
             showMessageErrorLogin();
@@ -65,7 +74,7 @@ public class LoginController implements Initializable {
     }
     
     private void validateUser() {
-        if(user.logued())
+        if(user.isUserAuthenticated())
             openMainWindow();
         else
             showMessageErrorLogin();
@@ -85,7 +94,7 @@ public class LoginController implements Initializable {
     }
     
     private void openMainJavaFx() throws Exception {
-        javaFx.Login.Login.close();
+        javaFx.login.Login.close();
         
         new Main().start(new Stage(), user.getVendedor());
     }

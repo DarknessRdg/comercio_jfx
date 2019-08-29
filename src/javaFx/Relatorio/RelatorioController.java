@@ -1,4 +1,4 @@
-package javaFx.Relatorio;
+package javaFx.relatorio;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 
 
 /**
- * FXML Controller class
  *
  * @author Luan
  */

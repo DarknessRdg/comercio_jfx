@@ -1,4 +1,4 @@
-package javaFx.Compra;
+package javaFx.compra;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import connectionDatabase.Conexao;
 
 /**
  *
- * @author Luan
+ * @author Luan Rodrigues
  */
 public class Carrinho {
     private int idVenda;

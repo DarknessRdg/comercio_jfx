@@ -1,0 +1,14 @@
+.mainFxmlClass {
+    .table-view{
+        -fx-font-size: 11pt;
+    }
+
+    .table-column{
+        -fx-font-size: 11pt;
+    }
+
+    #tableColumnPRECO{
+        -fx-alignment:center;
+    }
+
+}

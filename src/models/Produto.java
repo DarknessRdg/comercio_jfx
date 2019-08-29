@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.function.LongFunction;
 import javax.swing.JOptionPane;
 
 /**
@@ -35,6 +36,21 @@ public class Produto {
         this.codBarras = codBarras;
         this.preco = preco;
         setNome(nome);
+    }
+
+    public Produto(ResultSet result) {
+        try {
+            setProdutoFromResulSet(result);
+        } catch (SQLException e) {
+            System.out.println("Error constuctr Produto(ResultSet): " + e);
+        }
+    }
+
+    private void setProdutoFromResulSet(ResultSet result)  throws SQLException {
+        id = result.getInt("id");
+        codBarras = result.getString("cod_barras");
+        nome = result.getString("nome");
+        preco = result.getDouble("preco");
     }
     
     private void setNome(String nome) {
@@ -203,5 +219,45 @@ public class Produto {
         sttm.executeQuery();
         
         Conexao.closeConnection(connetion, sttm);
+    }
+
+    public static ArrayList<Produto> all() {
+        ArrayList<Produto> lista;
+        try {
+            lista = filterOnDatabase(null);
+        } catch (SQLException e) {
+            System.out.println("Error getAll on Produto : " + e);
+            lista = new ArrayList<>();
+        }
+        return lista;
+    }
+
+    private static ArrayList<Produto> filterOnDatabase(String filter) throws SQLException {
+        var query = prepareQuery(filter);
+
+        var connection = Conexao.getConnection();
+        var statement = connection.prepareStatement(query);
+        var result = statement.executeQuery();
+
+        var lista = new ArrayList<Produto>();
+        while (result.next())
+            lista.add(new Produto(result));
+
+        return lista;
+    }
+
+    private static String prepareQuery(String filter) {
+        var whereAtivo = " ATIVO = TRUE";
+        filter = filter == null ? " WHERE" + whereAtivo : filter + whereAtivo;
+
+        return "SELECT * FROM PRODUTO " + filter;
+    }
+
+    public static boolean exists(String codBarras) {
+        for (Produto produtoLoop: Produto.all()) {
+            if (produtoLoop.getCodBarras().equals(codBarras))
+                return true;
+        }
+        return false;
     }
 }

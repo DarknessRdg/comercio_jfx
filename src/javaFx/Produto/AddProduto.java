@@ -1,4 +1,4 @@
-package javaFx.Produto;
+package javaFx.produto;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +9,7 @@ import models.Produto;
 
 /**
  *
- * @author Luan
+ * @author Luan Rodrigues
  */
 public class AddProduto extends Application {
     public Stage stageProduto;

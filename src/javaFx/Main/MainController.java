@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package javaFx.Main;
+package javaFx.main;
 
-import javaFx.estyles.icons.Icon;
-import javaFx.estyles.colors.Color;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javaFx.styles.colors.Color;
 import javax.swing.JOptionPane;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
@@ -17,37 +13,42 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import models.Vendedor;
 
+
 /**
- * FXML Controller class
  *
- * @author Luan
+ * @author Luan Rodrigues
  */
 public class MainController implements Initializable {
+    @FXML
+    private AnchorPane paneForIconProdutos;
+    @FXML
+    private AnchorPane paneForIconCompra;
+    @FXML
+    private AnchorPane paneForIconRelatorio;
+    @FXML
+    private AnchorPane paneForIconFuncionarios;
     @FXML
     private JFXButton btnProdutos;
     @FXML
     private JFXButton btnRelatorio;
     @FXML
-    private JFXButton btnNovaCompra;
+    private JFXButton btnCompra;
     @FXML
-    private AnchorPane anchorMenu;
-    @FXML
-    private Pane panePerfil;
+    private JFXButton btnFuncionarios;
     @FXML
     private AnchorPane anchorConteudo;
     @FXML
-    private ImageView imgProduto;
-    @FXML
-    private ImageView imgCompra;
-    @FXML
-    private ImageView imgRelatorio;
-    @FXML
     private Label labelVendedorName;
+
+    private final String iconSize = "40px";
+    private Text iconProdutos;
+    private Text iconCompra;
+    private Text iconRelatorio;
+    private Text iconFuncionarios;
 
     private Vendedor vendedor;
     
@@ -56,12 +57,48 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.selectBtn("");
+        setButtonsIcons();
+        selectBtn("");
     }
     
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
         labelVendedorName.setText(vendedor.getNomeCapitalized());
+    }
+
+    private void setButtonsIcons() {
+        createIconProdutos();
+        createIconCompra();
+        createIconRelatorio();
+        createIconFuncionarios();
+    }
+
+    private void createIconProdutos() {
+        iconProdutos = GlyphsDude.createIcon(FontAwesomeIcon.ARCHIVE, iconSize);
+        iconProdutos.setFill(Color.DARK);
+        paneForIconProdutos.getChildren().add(iconProdutos);
+        fitToParentIcon(iconProdutos);
+    }
+
+    private void createIconCompra() {
+        iconCompra = GlyphsDude.createIcon(FontAwesomeIcon.SHOPPING_CART, iconSize);
+        iconCompra.setFill(Color.DARK);
+        paneForIconCompra.getChildren().add(iconCompra);
+        fitToParentIcon(iconCompra);
+    }
+
+    private void createIconRelatorio() {
+        iconRelatorio = GlyphsDude.createIcon(FontAwesomeIcon.NEWSPAPER_ALT, iconSize);
+        iconRelatorio.setFill(Color.DARK);
+        paneForIconRelatorio.getChildren().add(iconRelatorio);
+        fitToParentIcon(iconRelatorio);
+    }
+
+    private void createIconFuncionarios() {
+        iconFuncionarios = GlyphsDude.createIcon(FontAwesomeIcon.USERS, iconSize);
+        iconFuncionarios.setFill(Color.DARK);
+        paneForIconFuncionarios.getChildren().add(iconFuncionarios);
+        fitToParentIcon(iconFuncionarios);
     }
     
     @FXML
@@ -74,7 +111,7 @@ public class MainController implements Initializable {
     }
     
     private void openProdutosFxml() throws IOException {
-        AnchorPane paneProdutos = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/Produto/Produtos.fxml"));
+        AnchorPane paneProdutos = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/produto/Produtos.fxml"));
         fitToParent(paneProdutos);
         selectBtn("produto");
     }
@@ -89,7 +126,8 @@ public class MainController implements Initializable {
     }
     
     private void openCompraFxml() throws IOException {
-        AnchorPane paneCompra = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/Compra/Compra.fxml"));
+        AnchorPane paneCompra = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/compra/Compra.fxml"));
+
         fitToParent(paneCompra);
         selectBtn("compra");
     }
@@ -104,11 +142,27 @@ public class MainController implements Initializable {
     }
     
     private void openRelatorioFxml() throws IOException {
-        AnchorPane paneRelatorio = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/Relatorio/Relatorio.fxml"));
+        AnchorPane paneRelatorio = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/relatorio/Relatorio.fxml"));
         this.fitToParent(paneRelatorio);
         this.selectBtn("relatorio");  
     }
-    
+
+
+    @FXML
+    private void abrirFuncionarios(ActionEvent event) {
+        try {
+            openFuncionariosFxml();
+        } catch (IOException ex) {
+            System.out.println("error abrirRelatorio() : " + ex);
+        }
+    }
+
+    private void openFuncionariosFxml() throws IOException {
+        AnchorPane paneFuncionarios = (AnchorPane) FXMLLoader.load(getClass().getResource("/javaFx/funcionarios/Funcionarios.fxml"));
+        this.fitToParent(paneFuncionarios);
+        this.selectBtn("funcionario");
+    }
+
     private void fitToParent(AnchorPane pane){
         anchorConteudo.getChildren().setAll(pane);
         
@@ -116,6 +170,13 @@ public class MainController implements Initializable {
         AnchorPane.setLeftAnchor(pane, 4.0);
         AnchorPane.setRightAnchor(pane, 4.0);
         AnchorPane.setBottomAnchor(pane, 0.0);
+    }
+
+    private void fitToParentIcon(Text icon) {
+        AnchorPane.setTopAnchor(icon, 0.0);
+        AnchorPane.setLeftAnchor(icon, 0.0);
+        AnchorPane.setRightAnchor(icon, 0.0);
+        AnchorPane.setBottomAnchor(icon, 0.0);
     }
     
     private void selectBtn(String buttonName){  
@@ -129,7 +190,10 @@ public class MainController implements Initializable {
             case "relatorio":
                 selectBtnRelatorio();
                 break;
-            
+            case "funcionario":
+                selectBtnFuncionario();
+                break;
+
             default:
                 resetAllBtn();
                 break;
@@ -137,47 +201,65 @@ public class MainController implements Initializable {
     }
     
     private void selectBtnProduto() {
-        btnProdutos.setTextFill(Color.danger);
-        imgProduto.setImage(Icon.produtoSelected);
+        iconProdutos.setFill(Color.DANGER);
+        btnProdutos.setTextFill(Color.DANGER);
 
         resetBtnCompra();
         resetBtnRelatorio();
+        resetBtnFuncionarios();
     }
     
     private void selectBtnCompra() {
-        btnNovaCompra.setTextFill(Color.danger);
-        imgCompra.setImage(Icon.compraSelected);
+        iconCompra.setFill(Color.DANGER);
+        btnCompra.setTextFill(Color.DANGER);
 
         resetBtnProduto();
         resetBtnRelatorio();
+        resetBtnFuncionarios();
     }
     
     private void selectBtnRelatorio() {
-        btnRelatorio.setTextFill(Color.danger);
-        imgRelatorio.setImage(Icon.relatorioSelected);
+        iconRelatorio.setFill(Color.DANGER);
+        btnRelatorio.setTextFill(Color.DANGER);
 
         resetBtnCompra();
         resetBtnProduto();
+        resetBtnFuncionarios();
+    }
+
+    private void selectBtnFuncionario() {
+        iconFuncionarios.setFill(Color.DANGER);
+        btnFuncionarios.setTextFill(Color.DANGER);
+
+        resetBtnCompra();
+        resetBtnProduto();
+        resetBtnRelatorio();
     }
     
     private void resetAllBtn() {
         resetBtnCompra();
         resetBtnProduto();
         resetBtnRelatorio();
+        resetBtnFuncionarios();
     }
     
-    private void resetBtnProduto(){
-        btnProdutos.setTextFill(Color.dark);        
-        imgProduto.setImage(Icon.produtoNormal);
+    private void resetBtnProduto() {
+        btnProdutos.setTextFill(Color.DARK);
+        iconProdutos.setFill(Color.DARK);
     }
     
-    private void resetBtnCompra(){
-        btnNovaCompra.setTextFill(Color.dark);
-        imgCompra.setImage(Icon.compraNormal);
+    private void resetBtnCompra() {
+        btnCompra.setTextFill(Color.DARK);
+        iconCompra.setFill(Color.DARK);
     }
     
-    private void resetBtnRelatorio(){
-        btnRelatorio.setTextFill(Color.dark);
-        imgRelatorio.setImage(Icon.relatorioNormal);
+    private void resetBtnRelatorio() {
+        btnRelatorio.setTextFill(Color.DARK);
+        iconRelatorio.setFill(Color.DARK);
+    }
+
+    private void resetBtnFuncionarios() {
+        btnFuncionarios.setTextFill(Color.DARK);
+        iconFuncionarios.setFill(Color.DARK);
     }
 }

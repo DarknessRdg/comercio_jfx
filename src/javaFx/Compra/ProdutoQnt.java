@@ -1,4 +1,4 @@
-package javaFx.Compra;
+package javaFx.compra;
 
 import models.Produto;
 /**

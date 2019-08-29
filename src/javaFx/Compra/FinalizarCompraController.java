@@ -1,5 +1,5 @@
 
-package javaFx.Compra;
+package javaFx.compra;
 
 import java.net.URL;
 import java.util.ResourceBundle;

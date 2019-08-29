@@ -5,13 +5,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.synth.SynthTextAreaUI;
 
 /**
  *
- * @author Luan
+ * @author Luan Rodrigues
  */
 public class Vendedor {
+    private int id;
     private String nome;
     private String cpf;
     private int id_login;
@@ -21,8 +26,9 @@ public class Vendedor {
         this.cpf = cpf;
         this.nome = nome;
         this.id_login = id_login;
+        id = -1;
     }
-    
+
     public Vendedor(String cpf){
         this.cpf = cpf;
         
@@ -44,7 +50,7 @@ public class Vendedor {
     }
     
     public String getNome(){
-        return this.nome;
+        return this.getNomeCapitalized();
     }
     
     public String getNomeCapitalized() {
@@ -57,7 +63,7 @@ public class Vendedor {
     }
     
     public boolean save(){
-        if(!this.exists()){
+        if (!this.exists()) {
             if (this.nome != null)
                 return this.inserirVendedor();
             else
@@ -75,7 +81,7 @@ public class Vendedor {
         Connection conn = Conexao.getConnection();
         String query = "SELECT * FROM VENDEDOR WHERE CPF = ? ";
         
-        try{
+        try {
             PreparedStatement sttm = conn.prepareStatement(query);
             
             sttm.setString(1, this.cpf);
@@ -92,17 +98,62 @@ public class Vendedor {
             return false;
         }
     }
-   
-    private boolean removerVendedor(){
-        if(!this.removerLogin())
-            return false;  // nao foi possivel remover login (delete em cascata)
-        
+
+    private boolean inserirVendedor(){
         Connection conn = Conexao.getConnection();
-        String query = "DELETE FROM VENDEDOR WHERE COD_BARRAS = ?";
+        String query = "INSERT INTO VENDEDOR VALUES (?, ?, ?)";
+
+        try {
+            PreparedStatement sttm = conn.prepareStatement(query);
+            sttm.setString(1, cpf);
+            sttm.setString(2, nome);
+            sttm.setInt(3, id_login);
+
+            sttm.execute();
+            Conexao.closeConnection(conn, sttm);
+            return true;
+        } catch(SQLException ex) {
+            System.out.println("Error inserirVendedor " + ex);
+            Conexao.closeConnection(conn);
+            return false;
+        }
+    }
+
+    private boolean updateVendedor(){
+        Connection conn = Conexao.getConnection();
+        String query = "UPDATE VENDEDOR SET CPF = ?, NOME = ?, ID_LOGIN = ? "
+                + "WHERE CPF = ?";
+        
+        try {
+            PreparedStatement sttm = conn.prepareStatement(query);
+            sttm.setString(1, cpf);
+            sttm.setString(2, nome);
+            sttm.setInt(3, id_login);
+            
+            sttm.execute();
+            Conexao.closeConnection(conn, sttm);
+            return true;
+        } catch(SQLException ex) {
+            System.out.println("Error updateVendedor " + ex);
+            Conexao.closeConnection(conn);
+            return false;
+        }
+    }
+
+    private boolean removerVendedor(){
+
+        Connection conn = Conexao.getConnection();
+        String deleteVendedor = "UPDATE VENDEDOR SET ATIVO = ? WHERE CPF = ? ";
+        String deleteLogin = "UPDATE LOGIN SET ATIVO = ? WHERE ID = ? ";
+        String query = "BEING " + deleteVendedor + deleteLogin + " COMMIT;";
+
         try{
             PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setString(1, this.cpf);
+
+            sttm.setBoolean(1, false);
+            sttm.setString(2, cpf);
+            sttm.setBoolean(3, false);
+            sttm.setInt(4, id_login);
             sttm.execute();
             Conexao.closeConnection(conn, sttm);
             return true;
@@ -110,92 +161,81 @@ public class Vendedor {
             System.out.println("Error removerVendedor " + ex);
             Conexao.closeConnection(conn);
             return false;
-        }    
-    }
-    
-    private boolean removerLogin(){
-        Connection conn = Conexao.getConnection();
-        String query = "DELETE FROM LOGIN WHERE ID_LOGIN = ?";
-        
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            
-            sttm.setInt(1, this.id_login);
-            sttm.execute();
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error removerLogin " + ex);
-            Conexao.closeConnection(conn);
-            return false;
-        }
-    }
-    
-    private boolean updateVendedor(){
-        Connection conn = Conexao.getConnection();
-        String query = "UPDATE VENDEDOR SET CPF = ?, NOME = ?, ID_LOGIN = ? "
-                + "WHERE CPF = ?";
-        
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            sttm.setString(1, this.cpf);
-            sttm.setString(2, this.nome);
-            sttm.setInt(3, this.id_login);
-            
-            sttm.execute();
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error updateVendedor " + ex);
-            Conexao.closeConnection(conn);
-            return false;
-        }
-    }
-    
-    private boolean inserirVendedor(){
-        Connection conn = Conexao.getConnection();
-        String query = "INSERT INTO VENDEDOR VALUES (?, ?, ?)";
-        
-        try{
-            PreparedStatement sttm = conn.prepareStatement(query);
-            sttm.setString(1, this.cpf);
-            sttm.setString(2, this.nome);
-            sttm.setInt(3, this.id_login);
-            
-            sttm.execute();
-            Conexao.closeConnection(conn, sttm);
-            return true;
-        }catch(SQLException ex){
-            System.out.println("Error inserirVendedor " + ex);
-            Conexao.closeConnection(conn);
-            return false;
         }
     }
     
     private void setVendor() throws SQLException {
-        Connection conn = Conexao.getConnection();
-        PreparedStatement sttm = null;
-        ResultSet result = null;
+        var conn = Conexao.getConnection();
         String query = "SELECT * FROM VENDEDOR WHERE CPF = ? ";
-        
-        try{
-            sttm = conn.prepareStatement(query);
-            sttm.setString(1, this.cpf);
-            
-            result = sttm.executeQuery();
-            result.next();
-            
-            setVendedorFromResult(result);
-        }catch(SQLException ex){
-            System.out.println("Error getVendedor " + ex);
-            
-        }
+
+        var sttm = conn.prepareStatement(query);
+        sttm.setString(1, cpf);
+
+        var result = sttm.executeQuery();
+        result.next();
+
+        setVendedorFromResult(result);
         Conexao.closeConnection(conn, sttm, result);
     }
     
     private void setVendedorFromResult(ResultSet result) throws SQLException {
+        id = result.getInt("id");
         cpf = result.getString("cpf");
         nome = result.getString("nome");
         id_login = result.getInt("id_login");
+    }
+
+    public static ArrayList<Vendedor> all() {
+        ArrayList<Vendedor> list;
+        try {
+            list = Vendedor.filterOnDatabase(null);
+        } catch (SQLException e) {
+            list = new ArrayList<>();
+        }
+
+        return list;
+    }
+
+    private static ArrayList<Vendedor> filterOnDatabase(String filter) throws SQLException {
+        var query = prepareQuery(filter);
+
+        var connection = Conexao.getConnection();
+        var statement = connection.prepareStatement(query);
+        var result = statement.executeQuery();
+
+        var lista = new ArrayList<Vendedor>();
+        while (result.next())
+                lista.add(new Vendedor(result));
+        return lista;
+    }
+
+    private static String prepareQuery(String filter) {
+        var whereAtivo = " ATIVO = TRUE";
+        if (filter == null)
+            filter = " WHERE " + whereAtivo;
+        else
+            filter = " WHERE " + filter + " AND " + whereAtivo;
+
+        return filter;
+    }
+
+    public static void createNewVendedor(String nome, String cpf, String username, String password) {
+        try {
+            createVendedorAndLogin(nome, cpf, username, password);
+        } catch (SQLException e) {
+            System.out.println("Error createNewVendedor : " + e);;
+        }
+    }
+
+    private static void createVendedorAndLogin(String nome, String cpf, String username, String password) throws SQLException {
+        var query = "SELECT * FROM CREATE_NEW_VENDEDOR(?,?,?,?);";
+
+        var connection  = Conexao.getConnection();
+        var statement = connection.prepareStatement(query);
+        statement.setString(1, nome);
+        statement.setString(2, cpf);
+        statement.setString(3, username);
+        statement.setString(4, password);
+        statement.executeQuery();
     }
 }
